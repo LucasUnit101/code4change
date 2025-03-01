@@ -1,6 +1,8 @@
-import { TouchableWithoutFeedback, Keyboard, View, StyleSheet } from "react-native";
-import { Link } from "expo-router";
+import { Alert, TouchableWithoutFeedback, Keyboard, View, StyleSheet } from "react-native";
+import { Link, useRouter } from "expo-router";
 import { useState } from "react";
+
+import { useSession } from "@context/ctx";
 
 import Title from "@components/Title";
 import StyledTextInput from "@components/StyledTextInput";
@@ -13,7 +15,25 @@ export default function Login() {
   const [userID, setUserID] = useState('');
   const [password, setPassword] = useState('');
 
+  const { signIn } = useSession();
+  const router = useRouter();
+
   const loginUser = async () => {
+    const payload = {
+      userID,
+      password
+    };
+   
+    const result = await signIn(payload);
+    if (!result.success) {
+      Alert.alert('', result.message, [{
+        text: 'OK',
+        style: 'cancel'
+      }]);
+    } else {
+      console.log("GO TO HOME");
+      router.navigate('/home');
+    }
   };
 
   return (
@@ -37,8 +57,8 @@ export default function Login() {
             placeholder="supersecretpassword"
             autoComplete="current-password"
             autoCorrect={false}
-            required
             secureTextEntry={true}
+            required
           />
           <StyledButton
             text="Sign In"

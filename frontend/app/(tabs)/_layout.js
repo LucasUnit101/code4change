@@ -1,12 +1,24 @@
-import { Text, TouchableOpacity, Image } from 'react-native';
-import { Tabs, useRouter } from 'expo-router';
+import { Text, TouchableOpacity } from 'react-native';
+import { Redirect, Tabs, useRouter } from 'expo-router';
+
 import AntDesign from '@expo/vector-icons/AntDesign';
+
+import { useSession } from "@context/ctx";
 
 /*
   Tab layout of app, contains all possible routes in (tabs) subfolder
 */
 export default function TabLayout() {
+  const { session, signOut, isLoading } = useSession();
+  
   const router = useRouter();
+
+  if (isLoading) {
+    return null;
+  }
+  if (!session) {
+    return <Redirect href="/" />;
+  }
 
   return (
     <Tabs 
@@ -16,6 +28,7 @@ export default function TabLayout() {
         headerLeft: () => {
           return (
             <TouchableOpacity onPress={() => { 
+              signOut();
               if (router.canDismiss()) {
                 router.dismiss();
               } else {

@@ -1,5 +1,9 @@
+import { useEffect } from "react";
 import { View, StyleSheet } from "react-native";
-import { useRouter } from "expo-router";
+import { Redirect, useRouter } from "expo-router";
+
+import { useSession } from "@context/ctx";
+import { usePathname } from "expo-router";
 
 import Title from "@components/Title";
 import StyledButton from "@components/StyledButton";
@@ -10,7 +14,18 @@ import StyledButton from "@components/StyledButton";
   Displays login and create account buttons
 */
 export default function Index() {
+  const { session, isLoading } = useSession();
+  const pathname = usePathname();
+  
   const router = useRouter();
+
+  // If user is already logged in, redirect directly to home
+  if (isLoading) {
+    return null;
+  }
+  if (session && pathname === '/') {
+    return <Redirect href="/home" />;
+  }
 
   return (
     <View style={styles.container}>
