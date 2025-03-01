@@ -19,6 +19,9 @@ export default function Friends() {
           />
         </View>
       </View>
+      <View style={styles.scores}>
+        <Text style={styles.user}>Friend Name</Text> {/* If friend is in Library will present that on the friends tab*/}
+      </View>
     </View>
   );
 }
@@ -35,6 +38,19 @@ const styles = StyleSheet.create({
     flexDirection: "row", 
     alignItems: "center",  
     justifyContent: "space-between",
+    borderBottomWidth: "2",
+    borderBottomColor: "grey",
+  },
+
+  scores: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 20,
+  },
+
+  user: {
+    fontSize: 20,
+    fontWeight: "bold",
   },
 
   title: {
