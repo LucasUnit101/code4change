@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { View, StyleSheet } from "react-native";
 import { Redirect, useRouter } from "expo-router";
 
