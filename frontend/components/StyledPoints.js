@@ -39,8 +39,8 @@ export default function Home() {
     setRecordedTimes([...recordedTimes, elapsedTime]);
 
     const [hours, minutes, seconds] = elapsedTime.split(':').map(Number);
-    const totalSeconds = hours * 60*60 + minutes*60 + seconds;
-    const earnedPoints = Math.floor(totalSeconds) * 1;
+    const totalMinutes = hours * 60 + minutes + seconds / 60;
+    const earnedPoints = Math.floor(totalMinutes) * 10;
     setPoints(earnedPoints);
     setTotalPoints(totalPoints + earnedPoints);
 
@@ -88,7 +88,7 @@ export default function Home() {
           <Text key={index} style={styles.timer}>{index + 1}. {time}</Text>
         ))}
         <View>
-          <Text>Points Earned This Time: {points}</Text>
+          <Text>Points Earned: {points}</Text>
           <Text>Total Points: {totalPoints}</Text>
         </View>        
       </View>
