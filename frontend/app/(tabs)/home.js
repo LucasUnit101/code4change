@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import StyledButton from "@components/StyledButton";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 
 /*
   Route: /home
@@ -14,6 +14,7 @@ export default function Home() {
   const [points, setPoints] = useState(0);
   const [totalPoints, setTotalPoints] = useState(0);
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [isRunning, setIsRunning] = useState(false);
 
   useEffect(() => {
     const clockTimer = setInterval(() => {
@@ -37,31 +38,23 @@ export default function Home() {
     return () => clearInterval(timer);
   }, [startTime]);
 
-  const handleStart = () => {
-    setStartTime(new Date());
-  };
+  const handleStartStop = () => {
+    if (isRunning) {
+      clearInterval(timer);
+      setStartTime(null);
+      setRecordedTimes([...recordedTimes, elapsedTime]);
 
-  const handleStop = () => {
-    clearInterval(timer);
-    setStartTime(null);
-    setRecordedTimes([...recordedTimes, elapsedTime]);
+      const [hours, minutes, seconds] = elapsedTime.split(':').map(Number);
+      const totalSeconds = hours * 60 * 60 + minutes * 60 + seconds;
+      const earnedPoints = Math.floor(totalSeconds) * 1;
+      setPoints(earnedPoints);
+      setTotalPoints(totalPoints + earnedPoints);
 
-    const [hours, minutes, seconds] = elapsedTime.split(':').map(Number);
-    const totalSeconds = hours * 60 * 60 + minutes * 60 + seconds;
-    const earnedPoints = Math.floor(totalSeconds) * 1;
-    setPoints(earnedPoints);
-    setTotalPoints(totalPoints + earnedPoints);
-
-    console.log(`Elapsed Time: ${elapsedTime}`);
-  };
-
-  const handleReset = () => {
-    clearInterval(timer);
-    setStartTime(null);
-    setElapsedTime('00:00:00');
-    setRecordedTimes([]);
-    setPoints(0);
-    setTotalPoints(0);
+      console.log(`Elapsed Time: ${elapsedTime}`);
+    } else {
+      setStartTime(new Date());
+    }
+    setIsRunning(!isRunning);
   };
 
   const formatTime = (date) => {
@@ -72,51 +65,44 @@ export default function Home() {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.welcome}>
         <Text style={styles.font}>Welcome!</Text>
       </View>
       <View style={styles.block}>
         <Text style={styles.font2}>Current Time</Text>
         <Text style={styles.bigClock}>{formatTime(currentTime)}</Text>
-        <StyledButton
-          text="Press To Start Studying"
-          backgroundColor="#FA4616"
-          pressedColor="#cf360e"
-          onClick={handleStart}
-        />
-        
+        <View style = {{display: 'flex', flexDirection: 'row'}}>
+        <View style={styles.buttonContainer}>
+          <StyledButton
+            text={isRunning ? "Press To Stop Studying" : "Press To Start Studying"}
+            backgroundColor="#ffb6c1"
+            pressedColor="yellow"
+            onClick={handleStartStop}
+            textTransform="uppercase"
+            borderColor = 'transparent'
+            color = "yellow"
+          />
+        </View>
         <Text style={styles.timer}>{elapsedTime}</Text>
-        <StyledButton
-          text="Press To Stop Studying"
-          backgroundColor="#FA4616"
-          pressedColor="#cf360e"
-          onClick={handleStop}
-        />
-        <StyledButton
-          text="Reset"
-          backgroundColor="#FA4616"
-          pressedColor="#cf360e"
-          onClick={handleReset}
-        />
-        <Text style={styles.font}>Your study Time</Text>
+        </View>
+        <Text style={styles.recordTime}>Your study Time</Text>
         
         {recordedTimes.map((time, index) => (
-          <Text key={index} style={styles.timer}>{index + 1}. {time}</Text>
+          <Text key={index} style={styles.timeRecord}>{index + 1}. {time}</Text>
         ))}
         <View>
           <Text>Points Earned This Time: {points}</Text>
           <Text>Total Points: {totalPoints}</Text>
-        </View>        
+        </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    display: 'flex',
     backgroundColor: 'white',
     paddingHorizontal: 20,
   },
@@ -138,7 +124,15 @@ const styles = StyleSheet.create({
     fontSize: 40,
     fontWeight: "bold",
   },
-
+  recordTime:{
+    textAlign: "center",
+    marginTop: 40,
+    borderStartColor: 'grey',
+    borderTopWidth:2,
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "black",
+  },
   block: {
     padding: 10,
     width: "100%",
@@ -146,13 +140,22 @@ const styles = StyleSheet.create({
   },
   timer: {
     marginTop: 20,
-    fontSize: 12,
-    color: 'black',
+    fontSize: 30,
+    color: '#ffb6c1',
+    fontWeight: 'bold',
+  },
+  timeRecord:{
+    fontSize: 20,
+    color: 'grey',
   },
   bigClock: {
     fontSize: 48,
     fontWeight: 'bold',
     color: 'black',
     paddingBottom: 20,
+  },
+  buttonContainer: {
+    width: "50%",
+    justifyContent: 'center',
   }
 });
