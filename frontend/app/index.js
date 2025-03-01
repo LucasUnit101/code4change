@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
   header: {
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   logo: {
     width: 100,
