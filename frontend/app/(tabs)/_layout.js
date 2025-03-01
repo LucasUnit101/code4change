@@ -1,4 +1,4 @@
-import { Text, TouchableOpacity } from 'react-native';
+import { Text, TouchableOpacity, Image } from 'react-native';
 import { Tabs, useRouter } from 'expo-router';
 import AntDesign from '@expo/vector-icons/AntDesign';
 
@@ -32,7 +32,7 @@ export default function TabLayout() {
         name="home"
         options={{
           title: 'Home',
-          tabBarIcon: () => <AntDesign name="home" size={24} />
+          tabBarIcon: () => <AntDesign name="home" size={24} />,
         }}
       />
       <Tabs.Screen
