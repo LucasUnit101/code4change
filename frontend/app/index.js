@@ -24,13 +24,13 @@ export default function Index() {
           text="Login"
           backgroundColor="#FA4616"
           pressedColor="#cf360e"
-          onClick={() => router.navigate("/login")}
+          onClick={() => router.navigate("/home")}
         />
         <StyledButton
           text="Create Account"
           backgroundColor="#FA4616"
           pressedColor="#cf360e"
-          onClick={() => router.navigate("/register")}
+          onClick={() => router.navigate("/home")}
         />
       </View>
     </View>
