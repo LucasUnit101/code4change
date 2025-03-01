@@ -20,7 +20,7 @@ mongoose.connect(MONGO_URI)
 
 
 // Routes
-// app.use('/', require('./routes/'));
+app.use('/', require('./routes/userRoutes'));
 
 // Start Server
 app.listen(PORT, () => {
