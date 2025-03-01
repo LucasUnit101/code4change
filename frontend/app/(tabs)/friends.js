@@ -20,7 +20,7 @@ export default function Friends() {
         </View>
       </View>
       <View style={styles.scores}>
-        <Text style={styles.user}>Friend Name</Text> {/* If friend is in Library will present that on the friends tab*/}
+        <Text style={styles.user}>Friend Name</Text> 
       </View>
     </View>
   );
