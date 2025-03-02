@@ -1,137 +1,80 @@
-import React, { useState, useEffect } from 'react';
-import HomeButton from "@components/HomeButton";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { useCallback, useState } from "react";
+import { StyleSheet, View, Text, Pressable } from "react-native";
+
+import Ionicons from '@expo/vector-icons/Ionicons';
 
 /*
   Route: /home
 */
-
 export default function Home() {
-  const [startTime, setStartTime] = useState(null);
-  const [elapsedTime, setElapsedTime] = useState('00:00:00');
-  const [timer, setTimer] = useState(null);
-  const [totalTime, setTotalTime] = useState(0); // Total time in seconds
-  const [isRunning, setIsRunning] = useState(false);
-  const [pausedTime, setPausedTime] = useState(0); // Time when paused
+  const [pressed, setPressed] = useState(false);
 
-  useEffect(() => {
-    if (startTime) {
-      const newTimer = setInterval(() => {
-        const now = new Date();
-        const diff = now - startTime + pausedTime;
-        const hours = Math.floor(diff / (1000 * 60 * 60));
-        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-        setElapsedTime(`${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`);
-      }, 1000);
-      setTimer(newTimer);
-    }
-    return () => clearInterval(timer);
-  }, [startTime, pausedTime]);
+  const handlePress = useCallback(() => {
+    if (pressed) return;
+    setPressed(true);
+  }, [pressed]);
 
-  const handleStartStop = () => {
-    if (isRunning) {
-      clearInterval(timer);
-      setPausedTime(prev => prev + (new Date() - startTime));
-      setStartTime(null);
-    } else {
-      setStartTime(new Date());
-    }
-    setIsRunning(!isRunning);
-  };
+  const pauseTimer = () => {
 
-  const handleReset = () => {
-    clearInterval(timer);
-    setStartTime(null);
-    setElapsedTime('00:00:00');
-    setTotalTime(0);
-    setPausedTime(0);
-    setIsRunning(false);
-  };
+  }
 
-  const formatTotalTime = (totalSeconds) => {
-    const hours = Math.floor(totalSeconds / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
-    const seconds = totalSeconds % 60;
-    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-  };
+  const stopTimer = () => {
+    setPressed(false);
+  }
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.welcome}>
-        <Text style={styles.font}>Welcome!</Text>
-      </View>
-      <View style={styles.block}>
-        <View style={{ display: 'flex' }}>
-          <HomeButton
-            text={isRunning ? "Pause" : "Start"}
-            backgroundColor="red"
-            pressedColor="black"
-            onClick={handleStartStop}
-            elapsedTime={elapsedTime}
-            isRunning={isRunning}
-            onReset={handleReset}
-            textTransform="uppercase"
-            borderColor='transparent'
-          />
-        </View>
-      </View>
-    </ScrollView>
-  );
+    <View style={styles.container}>
+      <Pressable
+        style={[styles.button, { backgroundColor: pressed ? 'green': 'red' }]}
+        onPress={handlePress}
+      >
+        {!pressed ?
+          <Text style={styles.text}>Start</Text> :
+          (
+            <View style={styles.controlsContainer}>
+              <Text style={styles.text}>TIMER</Text>
+              <View style={styles.controls}>
+                <Pressable onPress={pauseTimer}>
+                  <Ionicons name="pause" size={60} color="white" />
+                </Pressable>
+                <Pressable onPress={stopTimer}>
+                  <Ionicons name="stop" size={60} color="white" />
+                </Pressable>
+              </View>
+            </View>
+          )
+        }
+      </Pressable>
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
-    paddingHorizontal: 20,
+    display: 'flex',
+    justifyContent: 'center',
+    padding: 20
   },
-  welcome: {
-    justifyContent: 'start',
-    alignItems: 'start',
-    color: "black",
-    textAlign: "left",
-    borderBottomColor: 'grey',
-    borderBottomWidth: 2, 
+  button: {
+    aspectRatio: 1,
+    borderRadius: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
-  font: {
-    padding: 20, 
-    fontSize: 40,
-    fontWeight: "bold",
-  },
-  font2: {
-    textAlign: "left",
-    fontSize: 40,
-    fontWeight: "bold",
-  },
-  recordTime: {
-    textAlign: "center",
-    marginTop: 40,
-    borderStartColor: 'grey',
-    borderTopWidth: 2,
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "black",
-  },
-  block: {
-    padding: 10,
-    width: "100%",
-    backgroundColor: 'white',
-  },
-  timer: {
-    marginTop: 20,
+  text: {
     fontSize: 30,
-    color: '#ffb6c1',
-    fontWeight: 'bold',
+    color: 'white'
   },
-  timeRecord: {
-    fontSize: 20,
-    color: 'grey',
+  controlsContainer: {
+    display: 'flex',
+    gap: 20,
+    alignItems: 'center'
   },
-  bigClock: {
-    fontSize: 48,
-    fontWeight: 'bold',
-    color: 'black',
-    paddingBottom: 20,
-  },
+  controls: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 10
+  }
 });
