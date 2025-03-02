@@ -1,25 +1,46 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
 import { StyleSheet, View, Text, Pressable } from "react-native";
 
 import Ionicons from '@expo/vector-icons/Ionicons';
+
+import Clock from '@components/Clock';
 
 /*
   Route: /home
 */
 export default function Home() {
+  const [time, setTime] = useState(0);
   const [pressed, setPressed] = useState(false);
+  const [paused, setPaused] = useState(false);
+
+  const timer = useRef();
+  const pausedRef = useRef(paused);
+
+  useEffect(() => {
+    pausedRef.current = paused;
+  }, [paused]);
 
   const handlePress = useCallback(() => {
     if (pressed) return;
     setPressed(true);
-  }, [pressed]);
+    timer.current = setInterval(() => {
+      if (pausedRef.current) return;
+      setTime(prevTime => prevTime + 1);
+    }, 1000);
+  }, [pressed, paused]);
 
   const pauseTimer = () => {
-
+    setPaused(prevPaused => !prevPaused);
   }
 
   const stopTimer = () => {
+    clearInterval(timer.current);
+    timer.current = undefined;
+    setPaused(false);
+    setTime(0);
     setPressed(false);
+
+    // Make a request to the backend with time
   }
 
   return (
@@ -32,10 +53,10 @@ export default function Home() {
           <Text style={styles.text}>Start</Text> :
           (
             <View style={styles.controlsContainer}>
-              <Text style={styles.text}>TIMER</Text>
+              <Clock time={time} />
               <View style={styles.controls}>
                 <Pressable onPress={pauseTimer}>
-                  <Ionicons name="pause" size={60} color="white" />
+                  <Ionicons name={paused ? "play" : "pause"} size={60} color="white" />
                 </Pressable>
                 <Pressable onPress={stopTimer}>
                   <Ionicons name="stop" size={60} color="white" />
