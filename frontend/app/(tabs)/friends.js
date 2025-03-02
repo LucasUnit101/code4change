@@ -1,19 +1,38 @@
 import { Link } from 'expo-router';
 import { Pressable, View, Text, StyleSheet, FlatList } from "react-native";
-import { useCallback, useState } from "react";
+import { useEffect, useCallback, useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import Constants from "expo-constants";
+import * as Location from "expo-location";
+
 import { useSession } from '@context/ctx';
-import FriendEntry from "@components/FriendEntry";
+import { getLibrary } from '@util/location';
+
 import Ionicons from '@expo/vector-icons/Ionicons';
+
+import FriendEntry from "@components/FriendEntry";
 
 /*
   Route: /friends
 */
-
 export default function Friends() {
   const [friendProfiles, setFriendProfiles] = useState([]);
   const { session } = useSession();
+
+  useEffect(() => {
+    const startLocation = async () => {
+      const foreground = await Location.requestForegroundPermissionsAsync();
+      if (!foreground.granted) return;
+
+      Location.watchPositionAsync({
+        accuracy: Location.Accuracy.BestForNavigation
+      }, (location) => {
+        const library = getLibrary(location);
+        
+      })
+    }
+    startLocation();
+  }, []);
 
   useFocusEffect(
     useCallback(() => {
