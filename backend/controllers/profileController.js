@@ -18,7 +18,7 @@ async function updateStreak(doc) {
 
   if (diff === 1) {
     doc.streak += 1; // Continue the streak
-  } else if (diff > 1) {
+  } else {
     doc.streak = 1; // Reset streak
   }
 

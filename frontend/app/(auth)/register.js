@@ -55,7 +55,7 @@ export default function Register() {
         /*
           Register successful, navigate to /login page
         */
-        router.navigate('/login');
+        router.navigate('/login'); 
       }
     }).catch(err => console.log(err));
   }
