@@ -46,7 +46,7 @@ export default function Home() {
   return (
     <ScrollView>
       <View style={styles.title}>
-      <Text style= {styles.font}>Start With Your Study Jouney</Text>
+      <Text style= {styles.font}>Start Your Study Jouney</Text>
       </View>
     <View style={styles.container}>
       <Pressable
@@ -83,12 +83,14 @@ const styles = StyleSheet.create({
     paddingTop: 80,
   },
   font:{
-    paddingTop: 40,
-    fontSize: 30,
+    paddingTop: 30,
+    fontSize: 40,
     fontWeight: 'bold',
     color: 'black',
     fontStyle: 'italic',
+    fontWeight: 'bold',
   },
+
   title: {
     borderBottomColor: 'black',
     borderBottomWidth: 1,
