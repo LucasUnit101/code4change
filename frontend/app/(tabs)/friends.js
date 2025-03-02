@@ -33,7 +33,10 @@ export default function Friends() {
   }, [session]);
 
   const renderFriend = ({ item, index }) => (
-    <FriendEntry name={`${index + 1}. ${item.name}`} />
+    <View style= {styles.friendBlock}>
+      <FriendEntry name={`${index + 1}. ${item.name}`} />
+      <View style = {styles.icon}><Ionicons name="trash-outline" size={40} color="black" /></View>
+    </View>
   );
 
   return (
@@ -53,9 +56,6 @@ export default function Friends() {
         contentContainerStyle={styles.scores}
         style={{ flex: 0.5 }}
       />
-      <View style={styles.trashcan}>
-        <Ionicons name="trash-outline" size={50} color="black" />
-      </View>
     </View>
   );
 }
@@ -100,4 +100,15 @@ const styles = StyleSheet.create({
     bottom: 20,
     right: 20,
   },
+  friendBlock:{
+    display:"flex",
+    flexDirection: "row",
+    alignItem: "center",
+    justifyContent: "space-between"
+  },
+  icon:{
+    alignItems:"center",
+    justifyContent:"center",
+    paddingVertical: 10,
+  }
 });
