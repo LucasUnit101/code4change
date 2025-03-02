@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState, useRef } from "react";
 import { StyleSheet, View, Text, Pressable, ScrollView } from "react-native";
+import { useSession } from "@context/ctx";
 import Constants from "expo-constants";
 
 import Ionicons from '@expo/vector-icons/Ionicons';
@@ -13,10 +14,11 @@ export default function Home() {
   const [time, setTime] = useState(0);
   const [pressed, setPressed] = useState(false);
   const [paused, setPaused] = useState(false);
+  const { session } = useSession();
 
   const timer = useRef();
   const pausedRef = useRef(paused);
-
+  
   useEffect(() => {
     pausedRef.current = paused;
   }, [paused]);
