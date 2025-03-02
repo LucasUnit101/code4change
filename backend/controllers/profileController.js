@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const Profile = require('../models/Profile');
 const { Error } = require('mongoose');
 
@@ -57,9 +58,9 @@ const getProfile = async (req, res) => {
   }
 }
 
-// @desc Update friends of a profile
-// @route POST /profiles/:profileID/friends
-const updateFriends = async (req, res) => {
+// @desc Add a friend to a profile
+// @route POST /profiles/:profileID/friend/add
+const addFriend = async (req, res) => {
   try {
     const { profileID } = req.params;
 
@@ -67,17 +68,21 @@ const updateFriends = async (req, res) => {
       return res.status(400).send('Please provide a profile ID!');
     }
 
-    const profile = await Profile.findOne({ _id: profileID }).exec();
+    const profile = await Profile.findById(profileID);
     if (!profile) {
       return res.status(404).send();
     }
 
-    const friends = req.body.friends;
-    if (!friends) {
-      return res.status(400).send('Please provide friends!');
+    const friendID = req.body.friendID;
+    if (!friendID) {
+      return res.status(400).send('Please provide a friend ID to add!');
     }
-    
-    profile.friends = friends;
+
+    if (profile.friends.includes(mongoose.Types.ObjectId(friendID))) {
+      return res.status(400).send('You cannot add an existing friend!');
+    }
+
+    profile.friends.push(mongoose.Types.ObjectId(friendID));
     await profile.save();
 
     return res.status(200).send();
@@ -87,4 +92,97 @@ const updateFriends = async (req, res) => {
   }
 }
 
-module.exports = { getProfile, updateFriends };
+// @desc Remove a friend from a profile
+// @route POST /profiles/:profileID/friend/remove
+const removeFriend = async (req, res) => {
+  try {
+    const { profileID } = req.params;
+
+    if (profileID === undefined) {
+      return res.status(400).send('Please provide a profile ID!');
+    }
+
+    const profile = await Profile.findById(profileID);
+    if (!profile) {
+      return res.status(404).send();
+    }
+
+    const friendID = req.body.friendID;
+    if (!friendID) {
+      return res.status(400).send('Please provide a friend ID to remove!');
+    }
+
+    if (!profile.friends.includes(mongoose.Types.ObjectId(friendID))) {
+      return res.status(400).send('You cannot remove a non-existing friend!');
+    }
+
+    profile.friends = profile.friends.filter(id => id !== mongoose.Types.ObjectId(friendID));
+    await profile.save();
+
+    return res.status(200).send();
+  } 
+  catch (err) { // Server error (Probably a Mongoose connection issue)
+    return res.status(500).json({ message: 'Internal Server Error', error: err.message });
+  }
+}
+
+const getWeekNumber = () => {
+  const date = new Date();
+  const startDate = new Date(1970, 0, 1); // Start from January 1, 1970 (UNIX epoch)
+  const days = Math.floor((date - startDate) / (24 * 60 * 60 * 1000)); // Total days passed
+  return Math.floor(days / 7); // Calculate weeks passed
+};
+
+// @desc Add time spent studying
+// @route POST /profiles/:profileID/time
+const addTime = async (req, res) => {
+  try {
+    const { profileID } = req.params;
+
+    if (profileID === undefined) {
+      return res.status(400).send('Please provide a profile ID!');
+    }
+
+    const profile = await Profile.findById(profileID);
+    if (!profile) {
+      return res.status(404).send();
+    }
+
+    const time = req.body.time;
+    const currentWeek = getWeekNumber();
+
+    const timeIdx = profile.totalTime.findIndex(entry => entry.week === currentWeek);
+    if (timeIdx === undefined) {
+      profile.totalTime.push({
+        week: currentWeek,
+        time: time
+      });
+    } else {
+      profile.totalTime[timeIdx].time += time;
+    }
+    
+    // Update streak
+    await updateStreak(profile);
+
+    // Calculate points
+    const points = 0;
+
+    const pointsIdx = profile.totalPoints.findIndex(entry => entry.week === currentWeek);
+    if (pointsIdx === undefined) {
+      profile.totalPoints.push({
+        week: currentWeek,
+        points: points
+      });
+    } else {
+      profile.totalPoints[pointsIdx].points += points;
+    }
+
+    await profile.save();
+    return res.status(200).send();
+  } 
+  catch (err) { // Server error (Probably a Mongoose connection issue)
+    return res.status(500).json({ message: 'Internal Server Error', error: err.message });
+  }
+}
+
+module.exports = { getProfile, addFriend, removeFriend, addTime };

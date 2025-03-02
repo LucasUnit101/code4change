@@ -5,7 +5,13 @@ const profileController = require('../controllers/profileController');
 router.route('/profiles/:userID')
   .get(profileController.getProfile);
 
-router.route('/profiles/:profileID/friends')
-  .get(profileController.updateFriends);
+router.route('/profiles/:profileID/friend/add')
+  .post(profileController.addFriend);
+
+router.route('/profiles/:profileID/friend/remove')
+  .post(profileController.removeFriend);
+
+router.route('/profiles/:profileID/time')
+  .post(profileController.addTime);
 
 module.exports = router;
