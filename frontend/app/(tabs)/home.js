@@ -74,7 +74,7 @@ export default function Home() {
   }, [time, library]);
 
   return (
-    <ScrollView contentContainerStyle={styles.wrapper}>
+    <View style={styles.wrapper}>
       <View style={styles.titleContainer}>
         <Text style={styles.title}>Track Your Study Time</Text>
         <Text style={styles.subtitle}>Stay focused and keep improving!</Text>
@@ -101,19 +101,20 @@ export default function Home() {
       </View>
 
       {library && <Text style={styles.libraryText}>Great work studying at {library}!</Text>}
-    </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   wrapper: {
-    flexGrow: 1,
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
     backgroundColor: "#FAFAFA",
   },
   titleContainer: {
+
     alignItems: "center",
     marginBottom: 20,
   },

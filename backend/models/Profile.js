@@ -47,6 +47,9 @@ const profileSchema = new mongoose.Schema({
   streak: {
     type: Number,
     default: 0
+  },
+  location: {
+    type: String, 
   }
 });
 
