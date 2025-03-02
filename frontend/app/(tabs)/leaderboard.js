@@ -39,7 +39,7 @@ export default function Leaderboard() {
     // Filter view if friends only
     if (view === 'friends') {
       const friends = profile.friends;
-      profiles = profiles.filter(profile => friends.includes(profile.id));
+      profiles = profiles.filter(p => p.id === profile.id || friends.includes(p.id));
     }
 
     // Get entries

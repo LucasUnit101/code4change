@@ -60,7 +60,6 @@ export default function Home() {
   };
 
   const stopTimer = useCallback(async () => {
-    console.log("Stop Timer");
     clearInterval(timer.current);
     timer.current = undefined;
     setPaused(false);
