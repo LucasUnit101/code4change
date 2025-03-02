@@ -6,6 +6,7 @@ import Constants from "expo-constants";
 import { useSession } from '@context/ctx';
 import FriendEntry from "@components/FriendEntry";
 import Ionicons from '@expo/vector-icons/Ionicons';
+
 /*
   Route: /friends
 */
@@ -58,7 +59,7 @@ export default function Friends() {
     <View style= {styles.friendBlock}>
       <FriendEntry name={`${index + 1}. ${item.name}`} />
       <Pressable onPress={() => removeFriend(item.id)}>
-        <View style = {styles.icon}><Ionicons name="trash-outline" size={40} color="black" /></View>
+        <View style = {styles.icon}><Ionicons name="trash-outline" size={40} color="white" /></View>
       </Pressable>
     </View>
   );
@@ -87,7 +88,7 @@ export default function Friends() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: "#f0f4f8",  
     paddingHorizontal: 20,
     paddingTop: 20,
   },
@@ -96,7 +97,7 @@ const styles = StyleSheet.create({
     alignItems: "center",  
     justifyContent: "space-between",
     borderBottomWidth: 2,
-    borderBottomColor: "grey",
+    borderBottomColor: "#003B5C",  
   },
   scores: {
     padding: 20,
@@ -104,6 +105,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: "bold",
+    color: "#003B5C",  
   },
   buttonContainer: {
     marginLeft: 10, 
@@ -114,25 +116,34 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "600",
     borderWidth: 2,
-    borderColor: "black",
+    borderColor: "#F15A29",  
     borderRadius: 20,
     padding: 7,
     marginTop: 10,
+    color: "#F15A29", 
+    textAlign: "center",
   },
   trashcan: {
     position: "absolute",
     bottom: 20,
     right: 20,
   },
-  friendBlock:{
-    display:"flex",
+  friendBlock: {
+    display: "flex",
     flexDirection: "row",
     alignItem: "center",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+    marginBottom: 10,
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ddd",
   },
-  icon:{
-    alignItems:"center",
-    justifyContent:"center",
+  icon: {
+    alignItems: "center",
+    justifyContent: "center",
     paddingVertical: 10,
+    backgroundColor: "#F15A29",  
+    borderRadius: 50,
+    padding: 10,
   }
 });

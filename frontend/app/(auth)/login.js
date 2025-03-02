@@ -23,7 +23,7 @@ export default function Login() {
       userID,
       password
     };
-   
+
     const result = await signIn(payload);
     if (!result.success) {
       Alert.alert('', result.message, [{
@@ -48,6 +48,7 @@ export default function Login() {
             autoComplete="username"
             autoCorrect={false}
             required
+            style={styles.input}
           />
           <StyledTextInput
             field="Password"
@@ -58,36 +59,57 @@ export default function Login() {
             autoCorrect={false}
             secureTextEntry={true}
             required
+            style={styles.input}
           />
           <StyledButton
             text="Sign In"
             backgroundColor="#FA4616"
             pressedColor="#cf360e"
             onClick={loginUser}
+            style={styles.button}
           />
           <Link style={styles.create} href="/register">Create an Account</Link>
         </View>
       </View>
     </TouchableWithoutFeedback>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#292D5D',
-    paddingVertical: 20
+    backgroundColor: '#f5f6fa', // Soft light gray background for a polished look
+    paddingVertical: 40,
+    paddingHorizontal: 20,
   },
   form: {
     flex: 1,
-    gap: 30,
-    display: 'flex',
     justifyContent: 'center',
-    paddingHorizontal: 20
+    gap: 25,
+    marginTop: 50,
+  },
+  input: {
+    backgroundColor: '#ffffff',
+    borderRadius: 10,  
+    paddingHorizontal: 15,
+    paddingVertical: 12,
+    fontSize: 16,
+    borderWidth: 1,
+    borderColor: '#D1D8E0',  
+    elevation: 2,  
+  },
+  button: {
+    borderRadius: 10,  
+    paddingVertical: 15,
+    textAlign: 'center',
+    fontWeight: 'bold',
+    color: 'white',
   },
   create: {
-    marginTop: -20,
-    textAlign: 'right',
-    color: 'white'
+    marginTop: 10,
+    textAlign: 'center',
+    color: '#3498db',
+    fontSize: 14,
+    fontWeight: '500',
   }
 });
