@@ -18,7 +18,7 @@ async function updateStreak(doc) {
   if (diff === 1) {
     doc.streak += 1; // Continue the streak
   } else if (diff > 1) {
-    doc.streak = 0; // Reset streak
+    doc.streak = 1; // Reset streak
   }
 
   doc.lastDay = today; // Update lastDay
@@ -87,16 +87,16 @@ const getProfile = async (req, res) => {
 };
 
 // @desc Add a friend to a profile
-// @route POST /profiles/:profileID/friend/add
+// @route POST /profiles/:userID/friend/add
 const addFriend = async (req, res) => {
   try {
-    const { profileID } = req.params;
+    const { userID } = req.params;
 
-    if (profileID === undefined) {
-      return res.status(400).send("Please provide a profile ID!");
+    if (userID === undefined) {
+      return res.status(400).send("Please provide a user ID!");
     }
 
-    const profile = await Profile.findById(profileID);
+    const profile = await Profile.findOne({ user: userID }).exec();
     if (!profile) {
       return res.status(404).send();
     }
@@ -123,16 +123,16 @@ const addFriend = async (req, res) => {
 };
 
 // @desc Remove a friend from a profile
-// @route POST /profiles/:profileID/friend/remove
+// @route POST /profiles/:userID/friend/remove
 const removeFriend = async (req, res) => {
   try {
-    const { profileID } = req.params;
+    const { userID } = req.params;
 
-    if (profileID === undefined) {
-      return res.status(400).send("Please provide a profile ID!");
+    if (userID === undefined) {
+      return res.status(400).send("Please provide a user ID!");
     }
 
-    const profile = await Profile.findById(profileID);
+    const profile = await Profile.findOne({ user: userID }).exec();
     if (!profile) {
       return res.status(404).send();
     }
@@ -168,16 +168,16 @@ const getWeekNumber = () => {
 };
 
 // @desc Add time spent studying
-// @route POST /profiles/:profileID/time
+// @route POST /profiles/:userID/time
 const addTime = async (req, res) => {
   try {
-    const { profileID } = req.params;
+    const { userID } = req.params;
 
-    if (profileID === undefined) {
-      return res.status(400).send("Please provide a profile ID!");
+    if (userID === undefined) {
+      return res.status(400).send("Please provide a user ID!");
     }
 
-    const profile = await Profile.findById(profileID);
+    const profile = await Profile.findOne({ user: userID }).exec();
     if (!profile) {
       return res.status(404).send();
     }

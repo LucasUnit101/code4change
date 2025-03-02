@@ -8,13 +8,13 @@ router.route('/profiles')
 router.route('/profiles/:userID')
   .get(profileController.getProfile);
 
-router.route('/profiles/:profileID/friend/add')
+router.route('/profiles/:userID/friend/add')
   .post(profileController.addFriend);
 
-router.route('/profiles/:profileID/friend/remove')
+router.route('/profiles/:userID/friend/remove')
   .post(profileController.removeFriend);
 
-router.route('/profiles/:profileID/time')
+router.route('/profiles/:userID/time')
   .post(profileController.addTime);
 
 module.exports = router;
