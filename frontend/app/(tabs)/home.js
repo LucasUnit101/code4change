@@ -2,6 +2,9 @@ import { useCallback, useEffect, useState, useRef } from "react";
 import { StyleSheet, View, Text, Pressable, ScrollView } from "react-native";
 import { useSession } from "@context/ctx";
 import Constants from "expo-constants";
+import * as Location from "expo-location";
+
+import { getLibrary } from "@util/location";
 
 import Ionicons from "@expo/vector-icons/Ionicons";
 
@@ -14,10 +17,15 @@ export default function Home() {
   const [time, setTime] = useState(0);
   const [pressed, setPressed] = useState(false);
   const [paused, setPaused] = useState(false);
+  const [library, setLibrary] = useState(undefined);
   const { session } = useSession();
 
   const timer = useRef();
   const pausedRef = useRef(paused);
+
+  useEffect(() => {
+    Location.requestForegroundPermissionsAsync();
+  }, []);
 
   useEffect(() => {
     pausedRef.current = paused;
@@ -30,38 +38,56 @@ export default function Home() {
       if (pausedRef.current) return;
       setTime((prevTime) => prevTime + 1);
     }, 1000);
+
+    // Determine if current location is in a library
+    const determineLocation = async () => {
+      const foreground = await Location.getForegroundPermissionsAsync();
+      // Location tracking not granted
+      if (!foreground.granted) return;
+
+      const location = await Location.getCurrentPositionAsync({
+        accuracy: Location.Accuracy.BestForNavigation
+      });
+
+      // Determine if close to library
+      setLibrary(getLibrary(location));
+    }
+    determineLocation();
   }, [pressed, paused]);
 
   const pauseTimer = () => {
     setPaused((prevPaused) => !prevPaused);
   };
 
-  const stopTimer = async () => {
+  const stopTimer = useCallback(async () => {
     clearInterval(timer.current);
     timer.current = undefined;
     setPaused(false);
     setTime(0);
     setPressed(false);
 
+    let addedTime = time;
+    if (library !== undefined) {
+      addedTime *= 1.5;
+    }
+
     // Make a request to the backend with time
     const URI = Constants.expoConfig.hostUri.split(":").shift();
-    const profile = await fetch(
-      `http://${URI}:${process.env.EXPO_PUBLIC_PORT}/profiles/${session}`
-    ).then((res) => res.json());
-
     await fetch(
-      `http://${URI}:${process.env.EXPO_PUBLIC_PORT}/profiles/${profile.id}/time`,
+      `http://${URI}:${process.env.EXPO_PUBLIC_PORT}/profiles/${session}/time`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          time,
+          addedTime,
         }),
       }
     );
-  };
+
+    setLibrary(undefined);
+  }, [time, library]);
 
   return (
     <ScrollView>
@@ -97,6 +123,7 @@ export default function Home() {
           )}
         </Pressable>
       </View>
+      {library && <Text>Great work studying at {library}!</Text>}
     </ScrollView>
   );
 }
