@@ -120,6 +120,9 @@ export default function Leaderboard() {
             points="Points"
           />
         }
+        ListHeaderComponentStyle={{
+          backgroundColor: '#f7f8fa'
+        }}
       />
       <LeaderboardEntry
         idx={loading ? "..." : weeklyUserEntry.idx}
@@ -146,6 +149,9 @@ export default function Leaderboard() {
             points="Points"
           />
         }
+        ListHeaderComponentStyle={{
+          backgroundColor: '#f7f8fa'
+        }}
       />
       <LeaderboardEntry
         idx={loading ? "..." : globalUserEntry.idx}
