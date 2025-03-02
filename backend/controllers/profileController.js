@@ -106,7 +106,7 @@ const addFriend = async (req, res) => {
       return res.status(400).send("Please provide a friend ID to add!");
     }
 
-    if (profile.friends.includes(mongoose.Types.ObjectId(friendID))) {
+    if (profile.friends.some(id => id.toString().replace(/['"]+/g, "") === friendID)) {
       return res.status(400).send("You cannot add an existing friend!");
     }
 
@@ -142,12 +142,12 @@ const removeFriend = async (req, res) => {
       return res.status(400).send("Please provide a friend ID to remove!");
     }
 
-    if (!profile.friends.includes(mongoose.Types.ObjectId(friendID))) {
+    if (!profile.friends.some(id => id.toString().replace(/['"]+/g, "") === friendID)) {
       return res.status(400).send("You cannot remove a non-existing friend!");
     }
 
     profile.friends = profile.friends.filter(
-      (id) => id !== mongoose.Types.ObjectId(friendID)
+      id => id.toString().replace(/['"]+/g, "") !== friendID
     );
     await profile.save();
 
