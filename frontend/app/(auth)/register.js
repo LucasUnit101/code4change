@@ -78,6 +78,7 @@ export default function Register() {
               autoCorrect={false}
               required
               style={styles.input}
+              fontWeight="bold"
             />
             <StyledTextInput
               field="Username"
@@ -133,7 +134,7 @@ export default function Register() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f6fa', // Soft light gray background
+    backgroundColor: 'rgb(38, 44, 94)', 
     paddingVertical: 40,
     paddingHorizontal: 20,
   },
@@ -148,21 +149,21 @@ const styles = StyleSheet.create({
     marginTop: 50,
   },
   input: {
-    backgroundColor: '#ffffff',  // White background for input fields
-    borderRadius: 10,  // Rounded corners for inputs
+    backgroundColor: '#ffffff', 
+    borderRadius: 10,  
     paddingHorizontal: 15,
     paddingVertical: 12,
     fontSize: 16,
     borderWidth: 1,
-    borderColor: '#D1D8E0',  // Subtle gray border for input fields
-    elevation: 2,  // Subtle shadow for depth
+    borderColor: '#D1D8E0',  
+    elevation: 2, 
   },
   button: {
-    borderRadius: 10,  // Rounded corners for button
+    borderRadius: 10,  
     paddingVertical: 15,
     fontWeight: 'bold',
     color: 'white',
     textAlign: 'center',
-    marginTop: 20, // Space between inputs and button
+    marginTop: 20, 
   },
 });

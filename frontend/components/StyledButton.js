@@ -18,8 +18,7 @@ export default function StyledButton(props) {
     <Pressable 
       style={[styles.button, { 
         backgroundColor: pressed ? props.pressedColor : props.backgroundColor , 
-        borderColor: props.borderColor || 'black',
-        borderWidth: 2,
+        borderColor: props.borderColor || 'white',
       }]}
       onPressIn={() => setPressed(true)}
       onPressOut={() => setPressed(false)}
@@ -42,6 +41,6 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: 'black'
+    color: 'white'
   }
 });

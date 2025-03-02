@@ -28,27 +28,28 @@ export default function AuthLayout() {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: '#FA4616', // Match the button's color for consistency
+    backgroundColor: '#FA4616',
     height: 80,
     borderBottomWidth: 1,
-    borderBottomColor: '#D1D8E0',  // Light gray border for the header
+    borderBottomColor: '#D1D8E0',
   },
   headerTitle: {
     fontSize: 22,
     fontWeight: 'bold',
-    color: '#ffffff',  // White title for contrast
+    color: '#ffffff',  
   },
   backButton: {
-    marginLeft: 15,
+    marginBottom: 20, 
+    height: 40,
     paddingVertical: 10,
     paddingHorizontal: 15,
-    backgroundColor: '#ffffff',  // White background for button
+    backgroundColor: '#ffffff',  
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#D1D8E0',  // Subtle border color
+    borderColor: '#D1D8E0',  
   },
   backText: {
-    color: '#FA4616',  // Matching color to the header
+    color: '#FA4616',  
     fontWeight: '600',
     fontSize: 16,
   }

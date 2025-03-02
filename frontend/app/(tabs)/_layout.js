@@ -81,29 +81,29 @@ const styles = StyleSheet.create({
     backgroundColor: '#FA4616', // Consistent theme color
     height: 100,
     borderBottomWidth: 1,
-    borderBottomColor: '#D1D8E0',  // Light gray border for header
+    borderBottomColor: '#D1D8E0',  
   },
   headerTitle: {
     fontSize: 22,
     fontWeight: 'bold',
-    color: '#ffffff',  // White color for contrast
+    color: '#ffffff',  
   },
   logoutButton: {
     marginLeft: 15,
     paddingVertical: 10,
     paddingHorizontal: 20,
-    backgroundColor: '#ffffff', // White background for logout button
+    backgroundColor: '#ffffff', 
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#D1D8E0',  // Subtle border color
+    borderColor: '#D1D8E0',  
   },
   logoutText: {
-    color: '#FA4616', // Matching color with header
+    color: '#FA4616',
     fontWeight: '600',
     fontSize: 14,
   },
   tabBar: {
-    backgroundColor: '#ffffff', // Light background for tab bar
+    backgroundColor: '#ffffff', 
     borderTopWidth: 1,
     borderTopColor: '#D1D8E0', // Soft gray border for the tab bar
     height: 70,
@@ -111,10 +111,10 @@ const styles = StyleSheet.create({
   tabBarLabel: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#555', // Gray color for labels to be subtle but readable
+    color: '#555',
   },
   tabBarIcon: {
-    color: '#FA4616', // Icon color matching theme
+    color: '#FA4616', 
   },
   icon: {
     color: '#FA4616', // Matching icon color to the header and other UI elements
