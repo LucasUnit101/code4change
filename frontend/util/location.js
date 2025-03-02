@@ -1,7 +1,7 @@
 import libraries from "@assets/libraries.json";
 
 const haversineDistance = ([lat1, lon1], [lat2, lon2], isMiles = false) => {
-  const toRadian = angle => (Math.PI / 180) * angle;
+  const toRadian = (angle) => (Math.PI / 180) * angle;
   const distance = (a, b) => (Math.PI / 180) * (a - b);
   const RADIUS_OF_EARTH_IN_KM = 6371;
 
@@ -31,7 +31,10 @@ export const getLibrary = (location) => {
   let closestDistance = Number.MAX_VALUE;
 
   for (const library of libraries) {
-    const distance = haversineDistance([location.coords.latitude, location.coords.longitude], [library.Latitude, library.Longitude]);
+    const distance = haversineDistance(
+      [location.coords.latitude, location.coords.longitude],
+      [library.Latitude, library.Longitude]
+    );
     if (distance < closestDistance) {
       closestLibrary = library.name;
       closestDistance = distance;
@@ -39,4 +42,4 @@ export const getLibrary = (location) => {
   }
 
   return closestDistance < 0.1 ? closestLibrary : undefined;
-}
+};
