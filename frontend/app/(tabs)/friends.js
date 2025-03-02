@@ -26,9 +26,22 @@ export default function Friends() {
 
       Location.watchPositionAsync({
         accuracy: Location.Accuracy.BestForNavigation
-      }, (location) => {
-        const library = getLibrary(location);
-        
+      }, async (location) => {
+        let library = getLibrary(location);
+        if (library === undefined) library = "";
+
+        // Update db
+        const URI = Constants.expoConfig.hostUri.split(":").shift();
+        await fetch(
+          `http://${URI}:${process.env.EXPO_PUBLIC_PORT}/profiles/${session}/location`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ location: library }) 
+          }
+        );
       })
     }
     startLocation();

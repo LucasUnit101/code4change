@@ -49,7 +49,8 @@ const profileSchema = new mongoose.Schema({
     default: 0
   },
   location: {
-    type: String, 
+    type: String,
+    default: ""
   }
 });
 

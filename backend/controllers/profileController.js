@@ -241,10 +241,43 @@ const addTime = async (req, res) => {
   }
 };
 
+// @desc Update location of a profile
+// @route POST /profiles/:userID/location
+const updateLocation = async (req, res) => {
+  try {
+    const { userID } = req.params;
+
+    if (userID === undefined) {
+      return res.status(400).send("Please provide a user ID!");
+    }
+
+    const profile = await Profile.findOne({ user: userID }).exec();
+    if (!profile) {
+      return res.status(404).send();
+    }
+
+    const location = req.body.location;
+    if (!location) {
+      return res.status(400).send("Please provide a location!");
+    }
+
+    profile.location = location;
+    await profile.save();
+
+    return res.status(200).send();
+  } catch (err) {
+    // Server error (Probably a Mongoose connection issue)
+    return res
+      .status(500)
+      .json({ message: "Internal Server Error", error: err.message });
+  }
+};
+
 module.exports = {
   getAllProfiles,
   getProfile,
   addFriend,
   removeFriend,
   addTime,
+  updateLocation
 };

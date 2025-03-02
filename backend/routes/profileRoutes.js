@@ -17,4 +17,7 @@ router.route('/profiles/:userID/friend/remove')
 router.route('/profiles/:userID/time')
   .post(profileController.addTime);
 
+router.route('/profiles/:userID/location')
+  .post(profileController.updateLocation);
+
 module.exports = router;

@@ -41,5 +41,5 @@ export const getLibrary = (location) => {
     }
   }
 
-  return closestDistance < 0.1 ? closestLibrary : undefined;
+  return closestDistance < 0.5 ? closestLibrary : undefined;
 };
