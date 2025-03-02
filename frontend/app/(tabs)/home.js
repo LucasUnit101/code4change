@@ -90,20 +90,16 @@ export default function Home() {
   }, [time, library]);
 
   return (
-    <ScrollView>
-      <View style={styles.title}>
-        <Text style={styles.font}>Start Your Study Jouney</Text>
-      </View>
       <View style={styles.container}>
         <Pressable
           style={[
             styles.button,
-            { backgroundColor: pressed ? "green" : "red" },
+            { backgroundColor: pressed ? "green" : "#DD0000" },
           ]}
           onPress={handlePress}
         >
           {!pressed ? (
-            <Text style={styles.text}>Start</Text>
+            <Text style={styles.text}>START</Text>
           ) : (
             <View style={styles.controlsContainer}>
               <Clock time={time} />
@@ -122,18 +118,20 @@ export default function Home() {
             </View>
           )}
         </Pressable>
+        <View style={styles.padding}></View>
+        {library && <Text style={styles.library}>Great work studying at {library}!</Text>}
       </View>
-      {library && <Text>Great work studying at {library}!</Text>}
-    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    position: 'relative',
     flex: 1,
     display: "flex",
     justifyContent: "center",
-    paddingTop: 80,
+    paddingHorizontal: 30,
+    backgroundColor: "#220000",
   },
   font: {
     paddingTop: 30,
@@ -143,21 +141,18 @@ const styles = StyleSheet.create({
     fontStyle: "italic",
     fontWeight: "bold",
   },
-
-  title: {
-    borderBottomColor: "black",
-    borderBottomWidth: 1,
-    paddingHorizontal: 20,
-  },
   button: {
     aspectRatio: 1,
+    borderWidth: 5,
+    borderColor: 'black',
     borderRadius: "100%",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
   },
   text: {
-    fontSize: 30,
+    fontSize: 50,
+    fontWeight: 'bold',
     color: "white",
   },
   controlsContainer: {
@@ -170,4 +165,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 10,
   },
+  library: {
+    position: 'absolute',
+    color: 'white',
+    bottom: 10,
+    marginHorizontal: 'auto',
+    left: 0,
+    right: 0,
+    textAlign: 'center',
+    fontSize: 30
+  }
 });
