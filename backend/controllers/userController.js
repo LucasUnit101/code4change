@@ -52,6 +52,33 @@ const validatePassword = (password) => {
   };
 };
 
+// @desc Get user from an ID
+// @route GET /users/:userID
+// @access Public
+const getUser = async (req, res) => {
+  try {
+    const { userID } = req.params;
+
+    if (userID === undefined) {
+      return res.status(400).send('Please provide a user ID!');
+    }
+
+    const user = await User.findById(userID);
+    if (!user) {
+      return res.status(404).send();
+    }
+
+    return res.status(200).json({
+      name: user.name,
+      username: user.username,
+      email: user.email
+    });
+  } 
+  catch (err) { // Server error (Probably a Mongoose connection issue)
+    return res.status(500).json({ message: 'Internal Server Error', error: err.message });
+  }
+}
+
 // @desc Register new user
 // @route POST /register
 // @access Public
@@ -130,4 +157,4 @@ const loginUser = async (req, res) => {
   }
 }
 
-module.exports = { registerUser, loginUser };
+module.exports = { getUser, registerUser, loginUser };
