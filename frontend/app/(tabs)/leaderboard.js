@@ -28,51 +28,40 @@ export default function Leaderboard() {
     setGlobalEntries([]);
 
     const URI = Constants.expoConfig.hostUri.split(":").shift();
-    // Get user's name and scores
-    const profile = await fetch(`http://${URI}:${process.env.EXPO_PUBLIC_PORT}/profiles/${session}`)
-                            .then(res => res.json());
+    const profile = await fetch(`http://${URI}:${process.env.EXPO_PUBLIC_PORT}/profiles/${session}`).then(res => res.json());
     
-    // Create others' leaderboard entries
-    let profiles = await fetch(`http://${URI}:${process.env.EXPO_PUBLIC_PORT}/profiles`)
-                            .then(res => res.json());
+    let profiles = await fetch(`http://${URI}:${process.env.EXPO_PUBLIC_PORT}/profiles`).then(res => res.json());
     
-    // Filter view if friends only
     if (view === 'friends') {
       const friends = profile.friends;
       profiles = profiles.filter(p => p.id === profile.id || friends.includes(p.id));
     }
 
-    // Get entries
     let allWeeklyEntries = profiles.map(profile => ({
       id: profile.id,
       name: profile.name,
       points: getWeeklyPoints(profile)
     }));
-    allWeeklyEntries.sort((a, b) => {
-      return b.points - a.points;
-    })
+    allWeeklyEntries.sort((a, b) => b.points - a.points);
     allWeeklyEntries = allWeeklyEntries.map((entry, i) => ({
       ...entry,
       idx: i + 1
     }));
+    
     let allGlobalEntries = profiles.map(profile => ({
       id: profile.id,
       name: profile.name,
       points: getTotalPoints(profile)
     }));
-    allGlobalEntries.sort((a, b) => {
-      return b.points - a.points;
-    });
+    allGlobalEntries.sort((a, b) => b.points - a.points);
     allGlobalEntries = allGlobalEntries.map((entry, i) => ({
       ...entry,
       idx: i + 1
     }));
 
-    // Get index of user's entry
     const weeklyIdx = allWeeklyEntries.find(entry => entry.id === profile.id).idx;
     const globalIdx = allGlobalEntries.find(entry => entry.id === profile.id).idx;
 
-    // Set state
     setWeeklyUserEntry({
       idx: weeklyIdx,
       name: profile.name,
@@ -87,7 +76,7 @@ export default function Leaderboard() {
     setGlobalEntries(allGlobalEntries);
 
     setLoading(false);
-  }
+  };
 
   useFocusEffect(
     useCallback(() => {
@@ -111,17 +100,18 @@ export default function Leaderboard() {
           <Text style={styles.viewText}>Global</Text>
         </Pressable>
       </View>
-      <Text style={styles.leaderboardTitle}>Weekly</Text>
+
+      <Text style={styles.leaderboardTitle}>Weekly Leaderboard</Text>
       <FlatList
         data={weeklyEntries}
-        keyExtractor={item => item.idx}
-        renderItem={({ item }) =>
+        keyExtractor={item => item.idx.toString()}
+        renderItem={({ item }) => (
           <LeaderboardEntry
             idx={item.idx}
             name={item.name}
             points={item.points}
           />
-        }
+        )}
         stickyHeaderIndices={[0]}
         ListHeaderComponent={
           <LeaderboardEntry
@@ -136,17 +126,18 @@ export default function Leaderboard() {
         name={loading ? "..." : weeklyUserEntry.name}
         points={loading ? "..." : weeklyUserEntry.points}
       />
-      <Text style={styles.leaderboardTitle}>Overall</Text>
+
+      <Text style={styles.leaderboardTitle}>Overall Leaderboard</Text>
       <FlatList
         data={globalEntries}
-        keyExtractor={item => item.idx}
-        renderItem={({ item }) =>
+        keyExtractor={item => item.idx.toString()}
+        renderItem={({ item }) => (
           <LeaderboardEntry
             idx={item.idx}
             name={item.name}
             points={item.points}
           />
-        }
+        )}
         stickyHeaderIndices={[0]}
         ListHeaderComponent={
           <LeaderboardEntry
@@ -168,33 +159,76 @@ export default function Leaderboard() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#f7f8fa",
+    paddingHorizontal: 20,
+    paddingTop: 30,
   },
+
   viewButtons: {
-    display: 'flex',
     flexDirection: 'row',
+    justifyContent: 'center',
+    marginBottom: 20,
   },
+
   viewButton: {
     flex: 0.5,
-    display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 10
+    paddingVertical: 12,
+    backgroundColor: '#f0f4f8',
+    borderRadius: 8,
   },
+
   globalButton: {
     borderLeftWidth: 1,
+    borderLeftColor: '#ddd',
   },
+
   viewText: {
-    fontSize: 20,
-    fontWeight: 'bold'
-  },
-  currentView: {
-    backgroundColor: '#CCCCCC'
-  },
-  leaderboardTitle: {
-    padding: 10,
+    fontSize: 18,
     fontWeight: 'bold',
-    fontSize: 20,
+    color: '#333',
+  },
+
+  currentView: {
+    backgroundColor: '#4CAF50',
+    color: '#fff',
+  },
+
+  leaderboardTitle: {
+    fontSize: 24,
+    fontWeight: '600',
+    textAlign: 'center',
+    marginVertical: 10,
+    color: '#333',
     borderTopWidth: 1,
-    borderTopColor: 'black'
-  }
+    borderTopColor: '#ddd',
+    paddingVertical: 10,
+    backgroundColor: "#f0f4f8",
+  },
+
+  leaderboardEntry: {
+    backgroundColor: "#fff",
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    marginVertical: 8,
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    elevation: 4,
+  },
+
+  leaderboardEntryHeader: {
+    fontSize: 22,
+    fontWeight: '600',
+    color: '#333',
+    marginBottom: 5,
+  },
+
+  leaderboardEntryPoints: {
+    fontSize: 20,
+    color: '#2E8B57',
+    fontWeight: '500',
+  },
 });
