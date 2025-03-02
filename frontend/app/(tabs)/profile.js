@@ -21,7 +21,6 @@ export default function Profile() {
   useFocusEffect(
     useCallback(() => {
       setLoading(true);
-      // Get IP that Expo server is using to host app, allows to connect with the backend
       const URI = Constants.expoConfig.hostUri.split(":").shift();
       const profile = fetch(`http://${URI}:${process.env.EXPO_PUBLIC_PORT}/profiles/${session}`)
         .then(res => res.json())
@@ -32,24 +31,23 @@ export default function Profile() {
 
     }, [])
   );
-  // Make these all state variables
-  
+
   const [totalTimeStudied, setTotalTimeStudied] = useState(0);
   const [totalPointsScored, setTotalPointsScored] = useState(0);
   const [WeeklyTotalTime, setWeeklyTotalTime] = useState(0);
   const [WeeklyTotalPoints, setWeeklyTotalPoints] = useState(0);
+  
   useEffect(() => {
     if (profile === undefined) return;
-    // Do calculations here
-      let totalTime = getTotalTime(profile)
-      let totalPoints = getTotalPoints(profile)
-      let WeeklyTotalTime = getWeeklyTime(profile)
-      let WeeklyTotalPoints = getWeeklyPoints(profile)
+    let totalTime = getTotalTime(profile)
+    let totalPoints = getTotalPoints(profile)
+    let WeeklyTotalTime = getWeeklyTime(profile)
+    let WeeklyTotalPoints = getWeeklyPoints(profile)
 
-      setTotalTimeStudied(totalTime);
-      setTotalPointsScored(totalPoints);
-      setWeeklyTotalTime(WeeklyTotalTime);
-      setWeeklyTotalPoints(WeeklyTotalPoints);
+    setTotalTimeStudied(totalTime);
+    setTotalPointsScored(totalPoints);
+    setWeeklyTotalTime(WeeklyTotalTime);
+    setWeeklyTotalPoints(WeeklyTotalPoints);
   }, [profile]);
 
   return (
@@ -63,7 +61,7 @@ export default function Profile() {
       <View style={styles.top}>
         <Text style={styles.topField}>
           <Text>Current Streak: </Text>
-          <Text style={{ fontWeight: "400", fontSize: 25 }}>
+          <Text style={{ fontWeight: "500", fontSize: 26, color: "#FF6347" }}>
             {loading ? "..." : profile.streak || 0} days🔥
           </Text>
         </Text>
@@ -74,13 +72,13 @@ export default function Profile() {
           <Text style={styles.statTitle}>Weekly Stats:</Text>
           <Text style={styles.statItem}>
             Weekly Time Studied:{" "}
-            <Text style={{ fontWeight: "400" }}>
+            <Text style={styles.highlightText}>
               {loading ? "..." : formatTime(WeeklyTotalTime)}
             </Text>
           </Text>
           <Text style={styles.statItem}>
             Weekly Points:{" "}
-            <Text style={{ fontWeight: "400" }}>
+            <Text style={styles.highlightText}>
               {loading ? "..." : WeeklyTotalPoints}
             </Text>
           </Text>
@@ -90,13 +88,13 @@ export default function Profile() {
           <Text style={styles.statTitle}>Total Stats:</Text>
           <Text style={styles.statItem}>
             Total Time Studied:{" "}
-            <Text style={{ fontWeight: "400" }}>
+            <Text style={styles.highlightText}>
               {loading ? "..." : formatTime(totalTimeStudied)}
             </Text>
           </Text>
           <Text style={styles.statItem}>
             Total Points:{" "}
-            <Text style={{ fontWeight: "400" }}>
+            <Text style={styles.highlightText}>
               {loading ? "..." : totalPointsScored}
             </Text>
           </Text>
@@ -109,9 +107,9 @@ export default function Profile() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: "#f0f4f8",
     paddingHorizontal: 20,
-    paddingTop: 20,
+    paddingTop: 30,
   },
 
   header: {
@@ -121,49 +119,53 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontSize: 36,
-    fontWeight: "bold",
+    fontSize: 38,
+    fontWeight: "700",
+    color: "#333",
   },
 
   top: {
-    marginTop: 10,
+    marginTop: 20,
   },
 
   topField: {
     height: 50,
     width: "100%",
-    fontSize: 30,
-    paddingVertical: 9,
+    fontSize: 28,
+    paddingVertical: 10,
     fontWeight: "600",
-    justifyContent: "center",
-    alignItems: "center",
     textAlign: "center",
   },
 
   statsContainer: {
-    marginTop: 20,
+    marginTop: 30,
     flexDirection: "column",
     justifyContent: "flex-start",
     alignItems: "center",
-    borderRadius: 50,
-    borderColor: "black",
-    borderWidth: 2,
+    borderRadius: 20,
+    borderColor: "#ddd",
+    borderWidth: 1,
+    backgroundColor: "#ffffff",
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 5,
   },
 
   field: {
-    height: 175,
     width: 350,
-    padding: 10,
-    borderRadius: 10,
-    marginTop: 15,
-    marginBottom: 15,
+    padding: 20,
+    borderRadius: 15,
+    marginVertical: 15,
+    backgroundColor: "#fafafa",
   },
 
   statTitle: {
-    fontSize: 28,
-    fontWeight: "600",
+    fontSize: 30,
+    fontWeight: "700",
     textAlign: "center",
-    marginBottom: 10,
+    marginBottom: 15,
+    color: "#444",
   },
 
   statItem: {
@@ -172,5 +174,11 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     fontWeight: "500",
     textAlign: "center",
+    color: "#333",
+  },
+
+  highlightText: {
+    fontWeight: "600",
+    color: "#2E8B57",
   },
 });
