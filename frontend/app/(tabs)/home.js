@@ -66,11 +66,6 @@ export default function Home() {
     setTime(0);
     setPressed(false);
 
-    let addedTime = time;
-    if (library !== undefined) {
-      addedTime *= 1.5;
-    }
-
     // Make a request to the backend with time
     const URI = Constants.expoConfig.hostUri.split(":").shift();
     await fetch(
@@ -81,7 +76,8 @@ export default function Home() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          time: addedTime,
+          time,
+          multiplier: library !== undefined
         }),
       }
     );

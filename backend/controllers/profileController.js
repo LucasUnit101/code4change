@@ -220,6 +220,7 @@ const addTime = async (req, res) => {
     await updateStreak(profile);
 
     // Calculate points
+    const multiplier = req.body.multiplier ? 1.5 : 1;
     const points = 0;
 
     const pointsIdx = profile.totalPoints.findIndex(
@@ -228,10 +229,10 @@ const addTime = async (req, res) => {
     if (pointsIdx === -1) {
       profile.totalPoints.push({
         week: currentWeek,
-        points: points,
+        points: points * multiplier,
       });
     } else {
-      profile.totalPoints[pointsIdx].points += points;
+      profile.totalPoints[pointsIdx].points += points * multiplier;
     }
 
     await profile.save();
