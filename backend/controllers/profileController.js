@@ -110,7 +110,7 @@ const addFriend = async (req, res) => {
       return res.status(400).send("You cannot add an existing friend!");
     }
 
-    profile.friends.push(mongoose.Types.ObjectId(friendID));
+    profile.friends.push(new mongoose.Types.ObjectId(friendID));
     await profile.save();
 
     return res.status(200).send();
