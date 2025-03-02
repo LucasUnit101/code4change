@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState, useRef } from "react";
 import { StyleSheet, View, Text, Pressable, ScrollView } from "react-native";
+import Constants from "expo-constants";
 
 import Ionicons from '@expo/vector-icons/Ionicons';
 
@@ -41,6 +42,9 @@ export default function Home() {
     setPressed(false);
 
     // Make a request to the backend with time
+    const URI = Constants.expoConfig.hostUri.split(":").shift();
+    fetch(`http://${URI}:${process.env.EXPO_PUBLIC_PORT}/profiles/${session}`);
+    fetch(`http://${URI}:${process.env.EXPO_PUBLIC_PORT}/:profileID/${session}`);
   }
 
   return (

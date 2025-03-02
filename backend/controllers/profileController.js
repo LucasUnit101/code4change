@@ -47,6 +47,7 @@ const getProfile = async (req, res) => {
     await updateStreak(profile);
     
     return res.status(200).json({
+      id: profile._id.toString().replace(/['"]+/g, ''),
       friends: profile.friends,
       totalTime: profile.totalTime,
       totalPoints: profile.totalPoints,
