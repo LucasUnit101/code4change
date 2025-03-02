@@ -106,7 +106,7 @@ const addFriend = async (req, res) => {
       return res.status(400).send("Please provide a friend ID to add!");
     }
 
-    const friend = await Profile.findById(friendID);
+    const friend = await Profile.findOne({ user: friendID }).exec();
     if (!friend) {
       return res.status(400).send("Friend ID is an invalid profile!");
     }
@@ -147,7 +147,7 @@ const removeFriend = async (req, res) => {
       return res.status(400).send("Please provide a friend ID to remove!");
     }
 
-    const friend = Profile.findById(friendID);
+    const friend = await Profile.findOne({ user: friendID }).exec();
     if (!friend) {
       return res.status(400).send("Friend ID is an invalid profile!");
     }
