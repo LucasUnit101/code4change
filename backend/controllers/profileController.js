@@ -8,7 +8,7 @@ const { Error } = require('mongoose');
 async function updateStreak(doc) {
   if (!doc) return;
 
-  const lastDay = new Date(doc.lastDay);
+  const lastDay = new Date(doc.lastDay ?? -8640000000000000);
   const today = new Date();
   
   // Normalize dates (set to midnight to avoid time differences)
