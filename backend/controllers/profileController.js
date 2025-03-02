@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const User = require("../models/User");
 const Profile = require("../models/Profile");
 const { Error } = require("mongoose");
 
@@ -106,16 +107,18 @@ const addFriend = async (req, res) => {
       return res.status(400).send("Please provide a friend ID to add!");
     }
 
-    const friend = await Profile.findOne({ user: friendID }).exec();
+    const friend = await User.findOne({ username: friendID }).exec();
     if (!friend) {
-      return res.status(400).send("Friend ID is an invalid profile!");
+      return res.status(400).send("Friend ID is an invalid username!");
     }
 
-    if (profile.friends.includes(friend._id)) {
+    const friendProfile = await Profile.findOne({ user: friend._id }).exec();
+
+    if (profile.friends.includes(friendProfile._id)) {
       return res.status(400).send("You cannot add an existing friend!");
     }
 
-    profile.friends.push(friend._id);
+    profile.friends.push(friendProfile._id);
     await profile.save();
 
     return res.status(200).send();
@@ -147,17 +150,19 @@ const removeFriend = async (req, res) => {
       return res.status(400).send("Please provide a friend ID to remove!");
     }
 
-    const friend = await Profile.findOne({ user: friendID }).exec();
+    const friend = await User.findOne({ username: friendID }).exec();
     if (!friend) {
-      return res.status(400).send("Friend ID is an invalid profile!");
+      return res.status(400).send("Friend ID is an invalid username!");
     }
 
-    if (!profile.friends.includes(friend._id)) {
+    const friendProfile = await Profile.findOne({ user: friend._id });
+
+    if (!profile.friends.includes(friendProfile._id)) {
       return res.status(400).send("You cannot remove a non-existing friend!");
     }
 
     profile.friends = profile.friends.filter(
-      id => id !== friend._id
+      id => id !== friendProfile._id
     );
     await profile.save();
 
