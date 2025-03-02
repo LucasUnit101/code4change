@@ -11,6 +11,7 @@ import LeaderboardEntry from "@components/LeaderboardEntry";
 /*
   Route: /leaderboard
 */
+
 export default function Leaderboard() {
   const [loading, setLoading] = useState(true);
   const [view, setView] = useState('friends');

@@ -36,14 +36,18 @@ const getAllProfiles = async (req, res) => {
       return res.status(404).send();
     }
 
-    return res.status(200).json(profiles.map(profile => ({
-      id: profile._id.toString().replace(/['"]+/g, ""),
-      name: profile.name,
-      friends: profile.friends.map(id => id.toString().replace(/['"]+/g, "")),
-      totalTime: profile.totalTime,
-      totalPoints: profile.totalPoints,
-      streak: profile.streak,
-    })));
+    return res.status(200).json(
+      profiles.map((profile) => ({
+        id: profile._id.toString().replace(/['"]+/g, ""),
+        name: profile.name,
+        friends: profile.friends.map((id) =>
+          id.toString().replace(/['"]+/g, "")
+        ),
+        totalTime: profile.totalTime,
+        totalPoints: profile.totalPoints,
+        streak: profile.streak,
+      }))
+    );
   } catch (err) {
     // Server error (Probably a Mongoose connection issue)
     return res
@@ -74,7 +78,7 @@ const getProfile = async (req, res) => {
     return res.status(200).json({
       id: profile._id.toString().replace(/['"]+/g, ""),
       name: profile.name,
-      friends: profile.friends.map(id => id.toString().replace(/['"]+/g, "")),
+      friends: profile.friends.map((id) => id.toString().replace(/['"]+/g, "")),
       totalTime: profile.totalTime,
       totalPoints: profile.totalPoints,
       streak: profile.streak,
@@ -240,4 +244,10 @@ const addTime = async (req, res) => {
   }
 };
 
-module.exports = { getAllProfiles, getProfile, addFriend, removeFriend, addTime };
+module.exports = {
+  getAllProfiles,
+  getProfile,
+  addFriend,
+  removeFriend,
+  addTime,
+};

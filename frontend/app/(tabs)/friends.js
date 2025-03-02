@@ -1,4 +1,4 @@
-import StyledButton from "@components/StyledButton";
+import { Link, router} from 'expo-router';
 import { View, Text, StyleSheet } from "react-native";
 
 /*
@@ -11,12 +11,9 @@ export default function Friends() {
       <View style={styles.header}>
         <Text style={styles.title}>Friends</Text>
         <View style={styles.buttonContainer}>
-          <StyledButton 
-            text="Add Friend"
-            backgroundColor="white"
-            borderColor='black'
-            pressedColor='#D3D3D3'
-          />
+        <Link href="../modal" style={styles.link}>
+          Add Friend
+        </Link>
         </View>
       </View>
       <View style={styles.scores}>
@@ -75,4 +72,15 @@ const styles = StyleSheet.create({
     textAlign: "left",
     padding: 20, 
   },
+
+  link: {
+    pressedColor:"white",
+    fontSize:"20",
+    fontWeight:"600",
+    borderWidth: 2, 
+    borderColor: "black",
+    borderRadius: 20,
+    padding: 7,
+    marginTop: 10,
+  }
 });
