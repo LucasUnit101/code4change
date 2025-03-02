@@ -46,6 +46,7 @@ const getAllProfiles = async (req, res) => {
         totalTime: profile.totalTime,
         totalPoints: profile.totalPoints,
         streak: profile.streak,
+        location: profile.location
       }))
     );
   } catch (err) {
@@ -82,6 +83,7 @@ const getProfile = async (req, res) => {
       totalTime: profile.totalTime,
       totalPoints: profile.totalPoints,
       streak: profile.streak,
+      location: profile.location
     });
   } catch (err) {
     // Server error (Probably a Mongoose connection issue)
