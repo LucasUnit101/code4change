@@ -25,3 +25,15 @@ export const getWeeklyPoints = (profile) => {
   );
   return weeklyPoints === undefined ? 0 : weeklyPoints.points;
 };
+
+export const getWeeklyTime = (profile) => {
+  const date = new Date();
+  const startDate = new Date(1970, 0, 1); // Start from January 1, 1970 (UNIX epoch)
+  const days = Math.floor((date - startDate) / (24 * 60 * 60 * 1000)); // Total days passed
+  const currentWeek = Math.floor(days / 7); // Calculate weeks passed
+
+  let weeklyTime = profile.totalTime.find(
+    entry => entry.week === currentWeek
+  );
+  return weeklyTime === undefined ? 0 : weeklyTime.seconds;
+};

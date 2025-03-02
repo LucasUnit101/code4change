@@ -3,6 +3,10 @@ import { View, Text, StyleSheet } from "react-native";
 import { useState, useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import Constants from "expo-constants";
+import { useEffect } from "react";
+import { getTotalPoints, getTotalTime, getWeeklyPoints, getWeeklyTime } from "@util/calculateTotals";
+import { formatTime } from "@util/timeCalculator";
+
 
 /*
   Route: /profile
@@ -10,7 +14,7 @@ import Constants from "expo-constants";
 
 export default function Profile() {
   const [loading, setLoading] = useState(true);
-  const [profile, setProfile] = useState({});
+  const [profile, setProfile] = useState(undefined);
 
   const { session } = useSession();
 
@@ -19,29 +23,40 @@ export default function Profile() {
       setLoading(true);
       // Get IP that Expo server is using to host app, allows to connect with the backend
       const URI = Constants.expoConfig.hostUri.split(":").shift();
-      fetch(`http://${URI}:${process.env.EXPO_PUBLIC_PORT}/profiles/${session}`)
-        .then((res) => res.json())
+      const profile = fetch(`http://${URI}:${process.env.EXPO_PUBLIC_PORT}/profiles/${session}`)
+        .then(res => res.json())
         .then(async (json) => {
           setProfile(json);
           setLoading(false);
         });
+
     }, [])
   );
+  // Make these all state variables
   
-  const totalTime = profile.totalTime ?? [];
-  const totalPoints = profile.totalPoints ?? [];
+  const [totalTimeStudied, setTotalTimeStudied] = useState(0);
+  const [totalPointsScored, setTotalPointsScored] = useState(0);
+  const [WeeklyTotalTime, setWeeklyTotalTime] = useState(0);
+  const [WeeklyTotalPoints, setWeeklyTotalPoints] = useState(0);
+  useEffect(() => {
+    if (profile === undefined) return;
+    // Do calculations here
+      let totalTime = getTotalTime(profile)
+      let totalPoints = getTotalPoints(profile)
+      let WeeklyTotalTime = getWeeklyTime(profile)
+      let WeeklyTotalPoints = getWeeklyPoints(profile)
 
-  const latestTotalTime = totalTime[totalTime.length - 1]?.minutes || 0;
-  const latestTotalPoints = totalPoints[totalPoints.length - 1]?.points || 0;
-
-  const totalTimeStudied = totalTime.reduce((acc, curr) => acc + curr.minutes, 0);
-  const totalPointsScored = totalPoints.reduce((acc, curr) => acc + curr.points, 0);
+      setTotalTimeStudied(totalTime);
+      setTotalPointsScored(totalPoints);
+      setWeeklyTotalTime(WeeklyTotalTime);
+      setWeeklyTotalPoints(WeeklyTotalPoints);
+  }, [profile]);
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title} numberOfLines={1} adjustsFontSizeToFit>
-          Hello {profile.user?.username || "User"}!
+          Hello {loading ? "..." : profile.name}!
         </Text>
       </View>
 
@@ -60,13 +75,13 @@ export default function Profile() {
           <Text style={styles.statItem}>
             Weekly Time Studied:{" "}
             <Text style={{ fontWeight: "400" }}>
-              {loading ? "..." : latestTotalTime}hr
+              {loading ? "..." : formatTime(WeeklyTotalTime)}
             </Text>
           </Text>
           <Text style={styles.statItem}>
             Weekly Points:{" "}
             <Text style={{ fontWeight: "400" }}>
-              {loading ? "..." : latestTotalPoints}
+              {loading ? "..." : WeeklyTotalPoints}
             </Text>
           </Text>
         </View>
@@ -76,7 +91,7 @@ export default function Profile() {
           <Text style={styles.statItem}>
             Total Time Studied:{" "}
             <Text style={{ fontWeight: "400" }}>
-              {loading ? "..." : totalTimeStudied}hr
+              {loading ? "..." : formatTime(totalTimeStudied)}
             </Text>
           </Text>
           <Text style={styles.statItem}>
