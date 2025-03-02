@@ -78,6 +78,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20,
+    color: "rgb(0, 56, 168)",  // UF blue
   },
   input: {
     width: "100%",
@@ -92,7 +93,7 @@ const styles = StyleSheet.create({
   button: {
     width: "100%",
     height: 50,
-    backgroundColor: "black",
+    backgroundColor: "rgb(0, 56, 168)",  // UF blue
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
@@ -106,8 +107,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   dismissText: {
-    color: "black",
+    color: "rgb(255, 79, 0)",  // UF orange
     fontSize: 16,
   },
 });
-

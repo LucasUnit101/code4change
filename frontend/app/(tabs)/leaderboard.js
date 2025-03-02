@@ -193,11 +193,11 @@ const styles = StyleSheet.create({
   viewText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#003F87', 
   },
 
   currentView: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#F56300', 
     color: '#fff',
   },
 
@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     textAlign: 'center',
     marginVertical: 10,
-    color: '#333',
+    color: '#003F87', 
     borderTopWidth: 1,
     borderTopColor: '#ddd',
     paddingVertical: 10,
@@ -228,13 +228,13 @@ const styles = StyleSheet.create({
   leaderboardEntryHeader: {
     fontSize: 22,
     fontWeight: '600',
-    color: '#333',
+    color: '#003F87', 
     marginBottom: 5,
   },
 
   leaderboardEntryPoints: {
     fontSize: 20,
-    color: '#2E8B57',
+    color: '#F56300', 
     fontWeight: '500',
   },
 });
