@@ -7,7 +7,6 @@ import { useEffect } from "react";
 import { getTotalPoints, getTotalTime, getWeeklyPoints, getWeeklyTime } from "@util/calculateTotals";
 import { formatTime } from "@util/timeCalculator";
 
-
 /*
   Route: /profile
 */
@@ -36,13 +35,13 @@ export default function Profile() {
   const [totalPointsScored, setTotalPointsScored] = useState(0);
   const [WeeklyTotalTime, setWeeklyTotalTime] = useState(0);
   const [WeeklyTotalPoints, setWeeklyTotalPoints] = useState(0);
-  
+
   useEffect(() => {
     if (profile === undefined) return;
-    let totalTime = getTotalTime(profile)
-    let totalPoints = getTotalPoints(profile)
-    let WeeklyTotalTime = getWeeklyTime(profile)
-    let WeeklyTotalPoints = getWeeklyPoints(profile)
+    let totalTime = getTotalTime(profile);
+    let totalPoints = getTotalPoints(profile);
+    let WeeklyTotalTime = getWeeklyTime(profile);
+    let WeeklyTotalPoints = getWeeklyPoints(profile);
 
     setTotalTimeStudied(totalTime);
     setTotalPointsScored(totalPoints);
@@ -61,7 +60,7 @@ export default function Profile() {
       <View style={styles.top}>
         <Text style={styles.topField}>
           <Text>Current Streak: </Text>
-          <Text style={{ fontWeight: "500", fontSize: 26, color: "#FF6347" }}>
+          <Text style={styles.streakText}>
             {loading ? "..." : profile.streak} day{!loading && profile.streak === 1 ? '' : 's'}🔥
           </Text>
         </Text>
@@ -121,7 +120,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 38,
     fontWeight: "700",
-    color: "#333",
+    color: "rgb(0, 56, 168)", 
   },
 
   top: {
@@ -135,6 +134,13 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     fontWeight: "600",
     textAlign: "center",
+    color: "rgb(0, 56, 168)", 
+  },
+
+  streakText: {
+    fontWeight: "500",
+    fontSize: 26,
+    color: "rgb(255, 79, 0)", 
   },
 
   statsContainer: {
@@ -164,7 +170,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     textAlign: "center",
     marginBottom: 15,
-    color: "#444",
+    color: "rgb(0, 56, 168)", 
   },
 
   statItem: {
@@ -178,6 +184,6 @@ const styles = StyleSheet.create({
 
   highlightText: {
     fontWeight: "600",
-    color: "#2E8B57",
+    color: "rgb(0, 56, 168)", 
   },
 });

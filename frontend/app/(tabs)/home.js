@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: "bold",
-    color: "#333",
+    color: "#003F87", 
   },
   subtitle: {
     fontSize: 16,
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   startButton: {
-    backgroundColor: "#4CAF50",
+    backgroundColor: "#F56300", 
     paddingVertical: 16,
     paddingHorizontal: 36,
     borderRadius: 10,
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   iconButton: {
-    backgroundColor: "#2196F3",
+    backgroundColor: "#003F87", 
     width: 60,
     height: 60,
     borderRadius: 30,
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   stopButton: {
-    backgroundColor: "#F44336",
+    backgroundColor: "#F44336", 
   },
   libraryText: {
     marginTop: 20,
@@ -174,3 +174,4 @@ const styles = StyleSheet.create({
     color: "#444",
   },
 });
+
