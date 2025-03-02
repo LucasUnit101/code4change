@@ -62,7 +62,7 @@ export default function Profile() {
         <Text style={styles.topField}>
           <Text>Current Streak: </Text>
           <Text style={{ fontWeight: "500", fontSize: 26, color: "#FF6347" }}>
-            {loading ? "..." : profile.streak} day{profile.streak === 1 ? '' : 's'}🔥
+            {loading ? "..." : profile.streak} day{!loading && profile.streak === 1 ? '' : 's'}🔥
           </Text>
         </Text>
       </View>
