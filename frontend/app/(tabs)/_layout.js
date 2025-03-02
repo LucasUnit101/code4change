@@ -79,7 +79,7 @@ export default function TabLayout() {
 const styles = StyleSheet.create({
   header: {
     backgroundColor: '#FA4616', // Consistent theme color
-    height: 100,
+    height: 110,
     borderBottomWidth: 1,
     borderBottomColor: '#D1D8E0',  
   },
