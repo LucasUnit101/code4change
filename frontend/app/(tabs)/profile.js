@@ -6,6 +6,7 @@ import Constants from "expo-constants";
 import { useEffect } from "react";
 import { getTotalPoints, getTotalTime, getWeeklyPoints, getWeeklyTime } from "@util/calculateTotals";
 import { formatTime } from "@util/timeCalculator";
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 
 /*
   Route: /profile
@@ -61,8 +62,9 @@ export default function Profile() {
         <Text style={styles.topField}>
           <Text>Current Streak: </Text>
           <Text style={styles.streakText}>
-            {loading ? "..." : profile.streak} day{!loading && profile.streak === 1 ? '' : 's'}🔥
+            {loading ? "..." : profile.streak} day{!loading && profile.streak === 1 ? ' ' : 's '}
           </Text>
+          <FontAwesome5 name="fire-alt" size={24} color="rgb(255, 79, 0)" />
         </Text>
       </View>
 
