@@ -123,7 +123,7 @@ const loginUser = async (req, res) => {
       return res.status(401).send('Cannot login user, incorrect password!');
     }
 
-    return res.status(200).send(user._id);
+    return res.status(200).send(user._id.toString().replace(/['"]+/g, ''));
   } 
   catch (err) { // Server error (Probably a Mongoose connection issue)
     return res.status(500).json({ message: 'Internal Server Error', error: err.message });
