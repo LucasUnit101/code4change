@@ -1,36 +1,79 @@
+import { useSession } from "@context/ctx";
 import { View, Text, StyleSheet } from "react-native";
+import { useState, useCallback } from "react";
+import { useFocusEffect } from "@react-navigation/native";
+import Constants from "expo-constants";
 
 /*
   Route: /profile
 */
 
 export default function Profile() {
+  const [loading, setLoading] = useState(true);
+  const [profile, setProfile] = useState({});
+
+  const { session } = useSession();
+
+  useFocusEffect(
+    useCallback(() => {
+      setLoading(true);
+      // Get IP that Expo server is using to host app, allows to connect with the backend
+      const URI = Constants.expoConfig.hostUri.split(":").shift();
+      fetch(`http://${URI}:${process.env.EXPO_PUBLIC_PORT}/profiles/${session}`)
+        .then((res) => res.json())
+        .then(async (json) => {
+          setProfile(json);
+          setLoading(false);
+        });
+    }, [])
+  );
+    
+  if (loading) {
+  return <Text>Loading...</Text>;
+  }
+
+  const totalTime = profile.totalTime ?? [];
+  const totalPoints = profile.totalPoints ?? [];
+
+  const latestTotalTime = totalTime[totalTime.length - 1]?.minutes || 0;
+  const latestTotalPoints = totalPoints[totalPoints.length - 1]?.points || 0;
+
+  const totalTimeStudied = totalTime.reduce((acc, curr) => acc + curr.minutes, 0);
+  const totalPointsScored = totalPoints.reduce((acc, curr) => acc + curr.points, 0);
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title} numberOfLines={1} adjustsFontSizeToFit>
-          Hello User!
+          Hello {profile.user?.name || "User"}!
         </Text>
       </View>
 
       <View style={styles.top}>
         <Text style={styles.topField}>
-          Current Streak: <Text style={{ fontWeight: "400" }}>0 days🔥</Text>
+          Current Streak: <Text style={{ fontWeight: "400" }}>{profile.streak || 0} days🔥</Text>
         </Text>
       </View>
 
       <View style={styles.statsContainer}>
-
         <View style={styles.field}>
           <Text style={styles.statTitle}>Weekly Stats:</Text>
-          <Text style={styles.statItem}>Weekly Time Studied: <Text style={{ fontWeight: "400" }}>5hr</Text></Text>
-          <Text style={styles.statItem}>Weekly Points: <Text style={{ fontWeight: "400" }}>1500</Text></Text>
+          <Text style={styles.statItem}>
+            Weekly Time Studied: <Text style={{ fontWeight: "400" }}>{latestTotalTime}hr</Text>
+          </Text>
+          <Text style={styles.statItem}>
+            Weekly Points: <Text style={{ fontWeight: "400" }}>{latestTotalPoints}</Text>
+          </Text>
         </View>
 
         <View style={styles.field}>
           <Text style={styles.statTitle}>Total Stats:</Text>
-          <Text style={styles.statItem}>Total Time Studied: <Text style={{ fontWeight: "400" }}>50hr</Text></Text>
-          <Text style={styles.statItem}>Total Points: <Text style={{ fontWeight: "400" }}>1500</Text></Text>
+          <Text style={styles.statItem}>
+            Total Time Studied: <Text style={{ fontWeight: "400" }}>{totalTimeStudied}hr</Text>
+          </Text>
+          <Text style={styles.statItem}>
+            Total Points: <Text style={{ fontWeight: "400" }}>{totalPointsScored}</Text>
+          </Text>
         </View>
       </View>
     </View>
@@ -73,20 +116,20 @@ const styles = StyleSheet.create({
   statsContainer: {
     marginTop: 20,
     flexDirection: "column",
-    justifyContent: "flex-start", 
+    justifyContent: "flex-start",
     alignItems: "center",
-    borderRadius: 50, 
+    borderRadius: 50,
     borderColor: "black",
-    borderWidth: 2, 
+    borderWidth: 2,
   },
 
   field: {
     height: 175,
-    width: 350, 
+    width: 350,
     padding: 10,
     borderRadius: 10,
-    marginTop: 15, 
-    marginBottom: 15, 
+    marginTop: 15,
+    marginBottom: 15,
   },
 
   statTitle: {
@@ -98,7 +141,7 @@ const styles = StyleSheet.create({
 
   statItem: {
     fontSize: 22,
-    marginTop: 12, 
+    marginTop: 12,
     marginBottom: 12,
     fontWeight: "500",
     textAlign: "center",
