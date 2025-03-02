@@ -77,6 +77,7 @@ export default function Register() {
               autoComplete="name"
               autoCorrect={false}
               required
+              style={styles.input}
             />
             <StyledTextInput
               field="Username"
@@ -88,6 +89,7 @@ export default function Register() {
               validate={validateUsername}
               required
               reset={reset}
+              style={styles.input}
             />
             <StyledTextInput
               field="Email"
@@ -99,6 +101,7 @@ export default function Register() {
               validate={validateEmail}
               required
               reset={reset}
+              style={styles.input}
             />
             <StyledTextInput
               field="Password"
@@ -111,35 +114,55 @@ export default function Register() {
               validate={validatePassword}
               required
               reset={reset}
+              style={styles.input}
             />
             <StyledButton
               text="Create Account"
               backgroundColor="#FA4616"
               pressedColor="#cf360e"
               onClick={createUser}
+              style={styles.button}
             />
           </View>
         </KeyboardAvoidingView>
       </View>
     </TouchableWithoutFeedback>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#292D5D',
-    paddingVertical: 20
+    backgroundColor: '#f5f6fa', // Soft light gray background
+    paddingVertical: 40,
+    paddingHorizontal: 20,
   },
   body: {
     flex: 1,
-    display: 'flex',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   form: {
-    display: 'flex',
-    gap: 20,
+    flex: 1,
     justifyContent: 'center',
-    paddingHorizontal: 20
-  }
+    gap: 25,
+    marginTop: 50,
+  },
+  input: {
+    backgroundColor: '#ffffff',  // White background for input fields
+    borderRadius: 10,  // Rounded corners for inputs
+    paddingHorizontal: 15,
+    paddingVertical: 12,
+    fontSize: 16,
+    borderWidth: 1,
+    borderColor: '#D1D8E0',  // Subtle gray border for input fields
+    elevation: 2,  // Subtle shadow for depth
+  },
+  button: {
+    borderRadius: 10,  // Rounded corners for button
+    paddingVertical: 15,
+    fontWeight: 'bold',
+    color: 'white',
+    textAlign: 'center',
+    marginTop: 20, // Space between inputs and button
+  },
 });
