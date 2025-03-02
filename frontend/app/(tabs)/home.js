@@ -60,6 +60,7 @@ export default function Home() {
   };
 
   const stopTimer = useCallback(async () => {
+    console.log("Stop Timer");
     clearInterval(timer.current);
     timer.current = undefined;
     setPaused(false);
@@ -81,7 +82,7 @@ export default function Home() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          addedTime,
+          time: addedTime,
         }),
       }
     );
