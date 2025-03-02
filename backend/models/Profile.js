@@ -18,7 +18,7 @@ const profileSchema = new mongoose.Schema({
     type: [
       {
         week: {
-          type: Date
+          type: Number
         },
         minutes: {
           type: Number
@@ -30,7 +30,7 @@ const profileSchema = new mongoose.Schema({
     type: [
       {
         week: {
-          type: Date
+          type: Number
         },
         points: {
           type: Number
