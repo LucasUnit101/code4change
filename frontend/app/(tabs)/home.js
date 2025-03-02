@@ -53,13 +53,23 @@ export default function Home() {
     setPaused(false);
     setTime(0);
     setPressed(false);
-    let addedTime = library !== undefined ? time * 1.5 : time;
+
+    // Make a request to the backend with time
     const URI = Constants.expoConfig.hostUri.split(":").shift();
-    await fetch(`http://${URI}:${process.env.EXPO_PUBLIC_PORT}/profiles/${session}/time`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ time: addedTime }),
-    });
+    await fetch(
+      `http://${URI}:${process.env.EXPO_PUBLIC_PORT}/profiles/${session}/time`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          time,
+          multiplier: library !== undefined
+        }),
+      }
+    );
+
     setLibrary(undefined);
   }, [time, library]);
 
