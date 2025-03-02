@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import StyledButton from "@components/StyledButton";
+import HomeButton from "@components/HomeButton";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
 
 /*
@@ -10,24 +10,15 @@ export default function Home() {
   const [startTime, setStartTime] = useState(null);
   const [elapsedTime, setElapsedTime] = useState('00:00:00');
   const [timer, setTimer] = useState(null);
-  const [recordedTimes, setRecordedTimes] = useState([]);
-  const [points, setPoints] = useState(0);
-  const [totalPoints, setTotalPoints] = useState(0);
-  const [currentTime, setCurrentTime] = useState(new Date());
+  const [totalTime, setTotalTime] = useState(0); // Total time in seconds
   const [isRunning, setIsRunning] = useState(false);
-
-  useEffect(() => {
-    const clockTimer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
-    return () => clearInterval(clockTimer);
-  }, []);
+  const [pausedTime, setPausedTime] = useState(0); // Time when paused
 
   useEffect(() => {
     if (startTime) {
       const newTimer = setInterval(() => {
         const now = new Date();
-        const diff = now - startTime;
+        const diff = now - startTime + pausedTime;
         const hours = Math.floor(diff / (1000 * 60 * 60));
         const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((diff % (1000 * 60)) / 1000);
@@ -36,32 +27,33 @@ export default function Home() {
       setTimer(newTimer);
     }
     return () => clearInterval(timer);
-  }, [startTime]);
+  }, [startTime, pausedTime]);
 
   const handleStartStop = () => {
     if (isRunning) {
       clearInterval(timer);
+      setPausedTime(prev => prev + (new Date() - startTime));
       setStartTime(null);
-      setRecordedTimes([...recordedTimes, elapsedTime]);
-
-      const [hours, minutes, seconds] = elapsedTime.split(':').map(Number);
-      const totalSeconds = hours * 60 * 60 + minutes * 60 + seconds;
-      const earnedPoints = Math.floor(totalSeconds) * 1;
-      setPoints(earnedPoints);
-      setTotalPoints(totalPoints + earnedPoints);
-
-      console.log(`Elapsed Time: ${elapsedTime}`);
     } else {
       setStartTime(new Date());
     }
     setIsRunning(!isRunning);
   };
 
-  const formatTime = (date) => {
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
-    const seconds = String(date.getSeconds()).padStart(2, '0');
-    return `${hours}:${minutes}:${seconds}`;
+  const handleReset = () => {
+    clearInterval(timer);
+    setStartTime(null);
+    setElapsedTime('00:00:00');
+    setTotalTime(0);
+    setPausedTime(0);
+    setIsRunning(false);
+  };
+
+  const formatTotalTime = (totalSeconds) => {
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
   };
 
   return (
@@ -70,30 +62,18 @@ export default function Home() {
         <Text style={styles.font}>Welcome!</Text>
       </View>
       <View style={styles.block}>
-        <Text style={styles.font2}>Current Time</Text>
-        <Text style={styles.bigClock}>{formatTime(currentTime)}</Text>
-        <View style = {{display: 'flex', flexDirection: 'row'}}>
-        <View style={styles.buttonContainer}>
-          <StyledButton
-            text={isRunning ? "Press To Stop Studying" : "Press To Start Studying"}
-            backgroundColor="#ffb6c1"
-            pressedColor="yellow"
+        <View style={{ display: 'flex' }}>
+          <HomeButton
+            text={isRunning ? "Pause" : "Start"}
+            backgroundColor="red"
+            pressedColor="black"
             onClick={handleStartStop}
+            elapsedTime={elapsedTime}
+            isRunning={isRunning}
+            onReset={handleReset}
             textTransform="uppercase"
-            borderColor = 'transparent'
-            color = "yellow"
+            borderColor='transparent'
           />
-        </View>
-        <Text style={styles.timer}>{elapsedTime}</Text>
-        </View>
-        <Text style={styles.recordTime}>Your study Time</Text>
-        
-        {recordedTimes.map((time, index) => (
-          <Text key={index} style={styles.timeRecord}>{index + 1}. {time}</Text>
-        ))}
-        <View>
-          <Text>Points Earned This Time: {points}</Text>
-          <Text>Total Points: {totalPoints}</Text>
         </View>
       </View>
     </ScrollView>
@@ -124,11 +104,11 @@ const styles = StyleSheet.create({
     fontSize: 40,
     fontWeight: "bold",
   },
-  recordTime:{
+  recordTime: {
     textAlign: "center",
     marginTop: 40,
     borderStartColor: 'grey',
-    borderTopWidth:2,
+    borderTopWidth: 2,
     fontSize: 20,
     fontWeight: "bold",
     color: "black",
@@ -144,7 +124,7 @@ const styles = StyleSheet.create({
     color: '#ffb6c1',
     fontWeight: 'bold',
   },
-  timeRecord:{
+  timeRecord: {
     fontSize: 20,
     color: 'grey',
   },
@@ -154,8 +134,4 @@ const styles = StyleSheet.create({
     color: 'black',
     paddingBottom: 20,
   },
-  buttonContainer: {
-    width: "50%",
-    justifyContent: 'center',
-  }
 });
