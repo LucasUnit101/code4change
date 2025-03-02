@@ -8,5 +8,5 @@ export default function Clock({ time }) {
     return `${hours}:${minutes}:${secs}`;
   };
 
-  return <Text style={{ fontSize: 30, color: "white", fontWeight: "bold" }}>{formatTime(time)}</Text>;
+  return <Text style={{ fontSize: 30, color: "white", fontWeight: "bold", fontFamily:"Courier New" }}>{formatTime(time)}</Text>;
 }

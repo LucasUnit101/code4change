@@ -28,9 +28,6 @@ export default function Profile() {
     }, [])
   );
     
-  if (loading) {
-  return <Text>Loading...</Text>;
-  }
 
   const totalTime = profile.totalTime ?? [];
   const totalPoints = profile.totalPoints ?? [];
@@ -51,7 +48,7 @@ export default function Profile() {
 
       <View style={styles.top}>
         <Text style={styles.topField}>
-          Current Streak: <Text style={{ fontWeight: "400" }}>{profile.streak || 0} days🔥</Text>
+          <Text>Current Streak: </Text><Text style={{ fontWeight: "400", fontSize: 25 }}>{loading ? "..." : profile.streak || 0} days🔥</Text>
         </Text>
       </View>
 
@@ -59,20 +56,20 @@ export default function Profile() {
         <View style={styles.field}>
           <Text style={styles.statTitle}>Weekly Stats:</Text>
           <Text style={styles.statItem}>
-            Weekly Time Studied: <Text style={{ fontWeight: "400" }}>{latestTotalTime}hr</Text>
+            Weekly Time Studied: <Text style={{ fontWeight: "400" }}>{loading? "...":latestTotalTime}hr</Text>
           </Text>
           <Text style={styles.statItem}>
-            Weekly Points: <Text style={{ fontWeight: "400" }}>{latestTotalPoints}</Text>
+            Weekly Points: <Text style={{ fontWeight: "400" }}>{loading? "...":latestTotalPoints}</Text>
           </Text>
         </View>
 
         <View style={styles.field}>
           <Text style={styles.statTitle}>Total Stats:</Text>
           <Text style={styles.statItem}>
-            Total Time Studied: <Text style={{ fontWeight: "400" }}>{totalTimeStudied}hr</Text>
+            Total Time Studied: <Text style={{ fontWeight: "400" }}>{loading? "..." : totalTimeStudied}hr</Text>
           </Text>
           <Text style={styles.statItem}>
-            Total Points: <Text style={{ fontWeight: "400" }}>{totalPointsScored}</Text>
+            Total Points: <Text style={{ fontWeight: "400" }}>{loading? "...":totalPointsScored}</Text>
           </Text>
         </View>
       </View>
@@ -105,12 +102,13 @@ const styles = StyleSheet.create({
 
   topField: {
     height: 50,
-    width: 350,
+    width: "100%",
     fontSize: 30,
-    textAlign: "left",
-    textAlignVertical: "center",
     paddingVertical: 9,
     fontWeight: "600",
+    justifyContent: "center",
+    alignItems: "center",
+    textAlign: "center",
   },
 
   statsContainer: {
