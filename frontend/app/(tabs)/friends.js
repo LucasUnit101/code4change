@@ -1,6 +1,7 @@
 import { Link } from 'expo-router';
-import { View, Text, StyleSheet, FlatList } from "react-native";
-import { useEffect, useState } from "react";
+import { Pressable, View, Text, StyleSheet, FlatList } from "react-native";
+import { useCallback, useState } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 import Constants from "expo-constants";
 import { useSession } from '@context/ctx';
 import FriendEntry from "@components/FriendEntry";
@@ -13,29 +14,52 @@ export default function Friends() {
   const [friendProfiles, setFriendProfiles] = useState([]);
   const { session } = useSession();
 
-  useEffect(() => {
-    const fetchFriends = async () => {
-      const URI = Constants.expoConfig.hostUri.split(":").shift();
-      // get your own profile
-      const profile = await fetch(`http://${URI}:${process.env.EXPO_PUBLIC_PORT}/profiles/${session}`)
-            .then(res => res.json());
-      // get all profiles
-      let profiles = await fetch(`http://${URI}:${process.env.EXPO_PUBLIC_PORT}/profiles`)
-            .then(res => res.json());
+  useFocusEffect(
+    useCallback(() => {
+      const fetchFriends = async () => {
+        const URI = Constants.expoConfig.hostUri.split(":").shift();
+        // get your own profile
+        const profile = await fetch(`http://${URI}:${process.env.EXPO_PUBLIC_PORT}/profiles/${session}`)
+              .then(res => res.json());
+        // get all profiles
+        let profiles = await fetch(`http://${URI}:${process.env.EXPO_PUBLIC_PORT}/profiles`)
+              .then(res => res.json());
+  
+        // only get friends
+        const friends = profile.friends;
+        profiles = profiles.filter(p => friends.includes(p.id));
+  
+        setFriendProfiles(profiles); 
+      };
+      fetchFriends();
+    }, [])
+  );
 
-      // only get friends
-      const friends = profile.friends;
-      profiles = profiles.filter(p => friends.includes(p.id));
+  const removeFriend = async (profileID) => {
+    const URI = Constants.expoConfig.hostUri.split(":").shift();
+    // Remove a friend from a profile
+    const response = await fetch(
+      `http://${URI}:${process.env.EXPO_PUBLIC_PORT}/profiles/${session}/friend/remove`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ friendID: profileID }) 
+      }
+    );
 
-      setFriendProfiles(profiles); 
-    };
-    fetchFriends();
-  }, [session]);
+    if (response.ok) {
+      setFriendProfiles(profiles => profiles.filter(p => p.id !== profileID));
+    }
+  }
 
   const renderFriend = ({ item, index }) => (
     <View style= {styles.friendBlock}>
       <FriendEntry name={`${index + 1}. ${item.name}`} />
-      <View style = {styles.icon}><Ionicons name="trash-outline" size={40} color="black" /></View>
+      <Pressable onPress={() => removeFriend(item.id)}>
+        <View style = {styles.icon}><Ionicons name="trash-outline" size={40} color="black" /></View>
+      </Pressable>
     </View>
   );
 

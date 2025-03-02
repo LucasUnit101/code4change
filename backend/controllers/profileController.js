@@ -154,20 +154,16 @@ const removeFriend = async (req, res) => {
       return res.status(400).send("Please provide a friend ID to remove!");
     }
 
-    const friend = await User.findOne({ username: friendID }).exec();
-    if (!friend) {
-      return res.status(400).send("Friend ID is an invalid username!");
-    }
-
-    const friendProfile = await Profile.findOne({ user: friend._id });
+    const friendProfile = await Profile.findById(friendID);
 
     if (!profile.friends.includes(friendProfile._id)) {
       return res.status(400).send("You cannot remove a non-existing friend!");
     }
 
     profile.friends = profile.friends.filter(
-      id => id !== friendProfile._id
+      id => id.toString() !== friendProfile._id.toString()
     );
+
     await profile.save();
 
     return res.status(200).send();
