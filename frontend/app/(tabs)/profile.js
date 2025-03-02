@@ -27,8 +27,7 @@ export default function Profile() {
         });
     }, [])
   );
-    
-
+  
   const totalTime = profile.totalTime ?? [];
   const totalPoints = profile.totalPoints ?? [];
 
@@ -36,7 +35,7 @@ export default function Profile() {
   const latestTotalPoints = totalPoints[totalPoints.length - 1]?.points || 0;
 
   const totalTimeStudied = totalTime.reduce((acc, curr) => acc + curr.minutes, 0);
-  const totalPointsScored = totalPoints.reduce((acc, curr) => acc + curr.points, 0); //Need to update current array not add
+  const totalPointsScored = totalPoints.reduce((acc, curr) => acc + curr.points, 0);
 
   return (
     <View style={styles.container}>
@@ -48,7 +47,10 @@ export default function Profile() {
 
       <View style={styles.top}>
         <Text style={styles.topField}>
-          <Text>Current Streak: </Text><Text style={{ fontWeight: "400", fontSize: 25 }}>{loading ? "..." : profile.streak || 0} days🔥</Text>
+          <Text>Current Streak: </Text>
+          <Text style={{ fontWeight: "400", fontSize: 25 }}>
+            {loading ? "..." : profile.streak || 0} days🔥
+          </Text>
         </Text>
       </View>
 
@@ -56,20 +58,32 @@ export default function Profile() {
         <View style={styles.field}>
           <Text style={styles.statTitle}>Weekly Stats:</Text>
           <Text style={styles.statItem}>
-            Weekly Time Studied: <Text style={{ fontWeight: "400" }}>{loading? "...":latestTotalTime}hr</Text>
+            Weekly Time Studied:{" "}
+            <Text style={{ fontWeight: "400" }}>
+              {loading ? "..." : latestTotalTime}hr
+            </Text>
           </Text>
           <Text style={styles.statItem}>
-            Weekly Points: <Text style={{ fontWeight: "400" }}>{loading? "...":latestTotalPoints}</Text>
+            Weekly Points:{" "}
+            <Text style={{ fontWeight: "400" }}>
+              {loading ? "..." : latestTotalPoints}
+            </Text>
           </Text>
         </View>
 
         <View style={styles.field}>
           <Text style={styles.statTitle}>Total Stats:</Text>
           <Text style={styles.statItem}>
-            Total Time Studied: <Text style={{ fontWeight: "400" }}>{loading? "..." : totalTimeStudied}hr</Text>
+            Total Time Studied:{" "}
+            <Text style={{ fontWeight: "400" }}>
+              {loading ? "..." : totalTimeStudied}hr
+            </Text>
           </Text>
           <Text style={styles.statItem}>
-            Total Points: <Text style={{ fontWeight: "400" }}>{loading? "...":totalPointsScored}</Text>
+            Total Points:{" "}
+            <Text style={{ fontWeight: "400" }}>
+              {loading ? "..." : totalPointsScored}
+            </Text>
           </Text>
         </View>
       </View>
