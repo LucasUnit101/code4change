@@ -62,7 +62,7 @@ export default function Profile() {
         <Text style={styles.topField}>
           <Text>Current Streak: </Text>
           <Text style={{ fontWeight: "500", fontSize: 26, color: "#FF6347" }}>
-            {loading ? "..." : profile.streak || 0} days🔥
+            {loading ? "..." : profile.streak} day{profile.streak === 1 ? '' : 's'}🔥
           </Text>
         </Text>
       </View>
@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderColor: "#ddd",
     borderWidth: 1,
-    backgroundColor: "#ffffff",
+    backgroundColor: "#fafafa",
     shadowColor: "#000",
     shadowOpacity: 0.1,
     shadowRadius: 10,
@@ -157,7 +157,6 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 15,
     marginVertical: 15,
-    backgroundColor: "#fafafa",
   },
 
   statTitle: {
