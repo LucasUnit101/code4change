@@ -25,6 +25,32 @@ async function updateStreak(doc) {
   await doc.save();
 }
 
+// @desc Get all profiles
+// @route GET /profiles
+// @access Public
+const getAllProfiles = async (req, res) => {
+  try {
+    const profiles = await Profile.find({}).exec();
+    if (!profiles || profiles.length === 0) {
+      return res.status(404).send();
+    }
+
+    return res.status(200).json(profiles.map(profile => ({
+      id: profile._id.toString().replace(/['"]+/g, ""),
+      name: profile.name,
+      friends: profile.friends.map(id => id.toString().replace(/['"]+/g, "")),
+      totalTime: profile.totalTime,
+      totalPoints: profile.totalPoints,
+      streak: profile.streak,
+    })));
+  } catch (err) {
+    // Server error (Probably a Mongoose connection issue)
+    return res
+      .status(500)
+      .json({ message: "Internal Server Error", error: err.message });
+  }
+};
+
 // @desc Get profile data of a user
 // @route GET /profiles/:userID
 // @access Public
@@ -46,7 +72,8 @@ const getProfile = async (req, res) => {
 
     return res.status(200).json({
       id: profile._id.toString().replace(/['"]+/g, ""),
-      friends: profile.friends,
+      name: profile.name,
+      friends: profile.friends.map(id => id.toString().replace(/['"]+/g, "")),
       totalTime: profile.totalTime,
       totalPoints: profile.totalPoints,
       streak: profile.streak,
@@ -198,4 +225,4 @@ const addTime = async (req, res) => {
   }
 };
 
-module.exports = { getProfile, addFriend, removeFriend, addTime };
+module.exports = { getAllProfiles, getProfile, addFriend, removeFriend, addTime };

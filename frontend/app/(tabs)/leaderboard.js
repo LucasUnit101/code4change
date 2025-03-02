@@ -1,44 +1,165 @@
-import StyledButton from "@components/StyledButton";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { useEffect, useCallback, useState } from "react";
+import { useFocusEffect } from "@react-navigation/native";
+import { View, Pressable, Text, StyleSheet, FlatList } from "react-native";
+import Constants from "expo-constants";
+
+import { useSession } from "@context/ctx";
+import { getTotalPoints, getWeeklyPoints } from "@util/calculateTotals";
+
+import LeaderboardEntry from "@components/LeaderboardEntry";
 
 /*
   Route: /leaderboard
 */
-
 export default function Leaderboard() {
+  const [loading, setLoading] = useState(true);
+  const [view, setView] = useState('friends');
+  const [weeklyUserEntry, setWeeklyUserEntry] = useState({});
+  const [globalUserEntry, setGlobalUserEntry] = useState({});
+  const [weeklyEntries, setWeeklyEntries] = useState([]);
+  const [globalEntries, setGlobalEntries] = useState([]);
+
+  const { session } = useSession();
+
+  const getLeaderboard = async (view) => {
+    setLoading(true);
+    setWeeklyEntries([]);
+    setGlobalEntries([]);
+
+    const URI = Constants.expoConfig.hostUri.split(":").shift();
+    // Get user's name and scores
+    const profile = await fetch(`http://${URI}:${process.env.EXPO_PUBLIC_PORT}/profiles/${session}`)
+                            .then(res => res.json());
+    
+    // Create others' leaderboard entries
+    let profiles = await fetch(`http://${URI}:${process.env.EXPO_PUBLIC_PORT}/profiles`)
+                            .then(res => res.json());
+    
+    // Filter view if friends only
+    if (view === 'friends') {
+      const friends = profile.friends;
+      profiles = profiles.filter(profile => friends.includes(profile.id));
+    }
+
+    // Get entries
+    let allWeeklyEntries = profiles.map(profile => ({
+      id: profile.id,
+      name: profile.name,
+      points: getWeeklyPoints(profile)
+    }));
+    allWeeklyEntries.sort((a, b) => {
+      return b.points - a.points;
+    })
+    allWeeklyEntries = allWeeklyEntries.map((entry, i) => ({
+      ...entry,
+      idx: i + 1
+    }));
+    let allGlobalEntries = profiles.map(profile => ({
+      id: profile.id,
+      name: profile.name,
+      points: getTotalPoints(profile)
+    }));
+    allGlobalEntries.sort((a, b) => {
+      return b.points - a.points;
+    });
+    allGlobalEntries = allGlobalEntries.map((entry, i) => ({
+      ...entry,
+      idx: i + 1
+    }));
+
+    // Get index of user's entry
+    const weeklyIdx = allWeeklyEntries.find(entry => entry.id === profile.id).idx;
+    const globalIdx = allGlobalEntries.find(entry => entry.id === profile.id).idx;
+
+    // Set state
+    setWeeklyUserEntry({
+      idx: weeklyIdx,
+      name: profile.name,
+      points: getWeeklyPoints(profile)
+    });
+    setGlobalUserEntry({
+      idx: globalIdx,
+      name: profile.name,
+      points: getTotalPoints(profile)
+    });
+    setWeeklyEntries(allWeeklyEntries);
+    setGlobalEntries(allGlobalEntries);
+
+    setLoading(false);
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      getLeaderboard(view);
+    }, [view])
+  );
+
   return (
     <View style={styles.container}>
-      <View style={styles.top}>
-        <View style={styles.header}>
-          <Text style={styles.title}>Leaderboard</Text>
-        </View>
-        <View style={styles.buttonContainer}>
-          <StyledButton 
-            text="Friends"
-            backgroundColor="white"
-            borderColor="black"
-            pressedColor="#D3D3D3"
-          />
-          <StyledButton 
-            text="Global"
-            backgroundColor="white"
-            borderColor="black"
-            pressedColor="#D3D3D3"
-          />
-        </View>
-        <View style={styles.leaderboardFields}>
-          <Text style={[styles.fieldText, styles.fieldHeader]}>#</Text>
-          <Text style={[styles.fieldText, styles.fieldHeader]}>Name</Text>
-          <Text style={[styles.fieldText, styles.fieldHeader]}>Time Studied</Text>
-        </View>
+      <View style={styles.viewButtons}>
+        <Pressable
+          style={[styles.viewButton, view === 'friends' && styles.currentView]}
+          onPress={() => setView('friends')}
+        >
+          <Text style={styles.viewText}>Friends</Text>
+        </Pressable>
+        <Pressable
+          style={[styles.viewButton, styles.globalButton, view === 'global' && styles.currentView]}
+          onPress={() => setView('global')}
+        >
+          <Text style={styles.viewText}>Global</Text>
+        </Pressable>
       </View>
-      <ScrollView style={styles.leaderboard}>
-        <View style={styles.scores}>
-          <Text style={[styles.users, styles.column1]}>1</Text> 
-          <Text style={[styles.users, styles.column2]}>Lucas Romero</Text> 
-          <Text style={[styles.users, styles.column3]}>100hr</Text> 
-        </View>
-      </ScrollView>
+      <Text style={styles.leaderboardTitle}>Weekly</Text>
+      <FlatList
+        data={weeklyEntries}
+        keyExtractor={item => item.idx}
+        renderItem={({ item }) =>
+          <LeaderboardEntry
+            idx={item.idx}
+            name={item.name}
+            points={item.points}
+          />
+        }
+        stickyHeaderIndices={[0]}
+        ListHeaderComponent={
+          <LeaderboardEntry
+            idx="#"
+            name="Name"
+            points="Points"
+          />
+        }
+      />
+      <LeaderboardEntry
+        idx={loading ? "..." : weeklyUserEntry.idx}
+        name={loading ? "..." : weeklyUserEntry.name}
+        points={loading ? "..." : weeklyUserEntry.points}
+      />
+      <Text style={styles.leaderboardTitle}>Overall</Text>
+      <FlatList
+        data={globalEntries}
+        keyExtractor={item => item.idx}
+        renderItem={({ item }) =>
+          <LeaderboardEntry
+            idx={item.idx}
+            name={item.name}
+            points={item.points}
+          />
+        }
+        stickyHeaderIndices={[0]}
+        ListHeaderComponent={
+          <LeaderboardEntry
+            idx="#"
+            name="Name"
+            points="Points"
+          />
+        }
+      />
+      <LeaderboardEntry
+        idx={loading ? "..." : globalUserEntry.idx}
+        name={loading ? "..." : globalUserEntry.name}
+        points={loading ? "..." : globalUserEntry.points}
+      />
     </View>
   );
 }
@@ -46,91 +167,33 @@ export default function Leaderboard() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
-    paddingHorizontal: 20,
-    paddingTop: 20,
   },
-
-  header: {
-    flexDirection: "row", 
-    alignItems: "center",  
-    justifyContent: "center",
+  viewButtons: {
+    display: 'flex',
+    flexDirection: 'row',
   },
-
-  scores: {
-    flexDirection: "row",
+  viewButton: {
+    flex: 0.5,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 10
+  },
+  globalButton: {
+    borderLeftWidth: 1,
+  },
+  viewText: {
+    fontSize: 20,
+    fontWeight: 'bold'
+  },
+  currentView: {
+    backgroundColor: '#CCCCCC'
+  },
+  leaderboardTitle: {
     padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "grey", 
-  },
-
-  users: {
-    fontSize: 14,
-    textAlign: "left",
-    color: "black",
-    fontWeight: "bold",
-    flexShrink: 1,
-    flexWrap: "nowrap", 
-  },
-
-  title: {
-    fontSize: 36,
-    fontWeight: "bold",
-    marginBottom: 20,
-  },
-
-  top: {
-    borderBottomColor: "grey",
-    borderBottomWidth: 2, 
-  },
-
-  buttonContainer: { 
-    flexDirection: "row",
-    width: 180,
-    height: 60,
-    marginBottom: 10, 
-    marginTop: 0, 
-  },
-
-  button: {
-    borderRadius: 20,
-  },
-
-  fieldText: {
-    fontSize: 14,
-    textAlign: "left",
-    color: "grey",
-    paddingHorizontal: 5, 
-    flexWrap: "nowrap",
-  },
-
-  fieldHeader: {
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-
-  leaderboardFields: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 10,
-    marginBottom: 10,
-  },
-
-  leaderboard: {
-    flex: 1,
-  },
-
-  column1: {
-    flex: 0.37,  
-    paddingRight: 10,
-  },
-
-  column2: {
-    flex: 0.51,  
-    paddingRight: 16,
-  },
-
-  column3: {
-    flex: 0.3,  
-  },
+    fontWeight: 'bold',
+    fontSize: 20,
+    borderTopWidth: 1,
+    borderTopColor: 'black'
+  }
 });

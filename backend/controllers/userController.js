@@ -52,39 +52,12 @@ const validatePassword = (password) => {
   };
 };
 
-// @desc Get user from an ID
-// @route GET /users/:userID
-// @access Public
-const getUser = async (req, res) => {
-  try {
-    const { userID } = req.params;
-
-    if (userID === undefined) {
-      return res.status(400).send('Please provide a user ID!');
-    }
-
-    const user = await User.findById(userID);
-    if (!user) {
-      return res.status(404).send();
-    }
-
-    return res.status(200).json({
-      name: user.name,
-      username: user.username,
-      email: user.email
-    });
-  } 
-  catch (err) { // Server error (Probably a Mongoose connection issue)
-    return res.status(500).json({ message: 'Internal Server Error', error: err.message });
-  }
-}
-
 // @desc Register new user
 // @route POST /register
 // @access Public
 const registerUser = async (req, res) => {
   // Parse request body and create hashed password
-  const { name, year, username, email, password } = req.body;
+  const { name, username, email, password } = req.body;
 
   if (password === undefined || password === "") {
     return res.status(400).send("Password is required!");
@@ -97,8 +70,6 @@ const registerUser = async (req, res) => {
 
   try {
     const newUser = new User({
-      name,
-      year,
       username,
       email,
       password: hashedPassword
@@ -109,7 +80,8 @@ const registerUser = async (req, res) => {
 
     // Create a new profile for the user
     const newProfile = new Profile({
-        user: newUser._id
+        user: newUser._id,
+        name
     });
     await newProfile.save();
 
@@ -157,4 +129,4 @@ const loginUser = async (req, res) => {
   }
 }
 
-module.exports = { getUser, registerUser, loginUser };
+module.exports = { registerUser, loginUser };
