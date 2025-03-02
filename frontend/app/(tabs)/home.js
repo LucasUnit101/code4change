@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState, useRef } from "react";
-import { StyleSheet, View, Text, Pressable } from "react-native";
+import { StyleSheet, View, Text, Pressable, ScrollView } from "react-native";
 
 import Ionicons from '@expo/vector-icons/Ionicons';
 
@@ -44,6 +44,10 @@ export default function Home() {
   }
 
   return (
+    <ScrollView>
+      <View style={styles.title}>
+      <Text style= {styles.font}>Start With Your Study Jouney</Text>
+      </View>
     <View style={styles.container}>
       <Pressable
         style={[styles.button, { backgroundColor: pressed ? 'green': 'red' }]}
@@ -67,6 +71,7 @@ export default function Home() {
         }
       </Pressable>
     </View>
+        </ScrollView>
   )
 }
 
@@ -75,7 +80,19 @@ const styles = StyleSheet.create({
     flex: 1,
     display: 'flex',
     justifyContent: 'center',
-    padding: 20
+    paddingTop: 80,
+  },
+  font:{
+    paddingTop: 40,
+    fontSize: 30,
+    fontWeight: 'bold',
+    color: 'black',
+    fontStyle: 'italic',
+  },
+  title: {
+    borderBottomColor: 'black',
+    borderBottomWidth: 1,
+    paddingHorizontal: 20,
   },
   button: {
     aspectRatio: 1,
