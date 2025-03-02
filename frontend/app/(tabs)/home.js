@@ -11,7 +11,7 @@ export default function Home() {
   const [time, setTime] = useState(0);
   const [pressed, setPressed] = useState(false);
   const [paused, setPaused] = useState(false);
-  const [library, setLibrary] = useState(undefined);
+  const [library, setLibrary] = useState("");
   const { session } = useSession();
   const timer = useRef();
   const pausedRef = useRef(paused);
@@ -40,7 +40,7 @@ export default function Home() {
         accuracy: Location.Accuracy.BestForNavigation,
       });
 
-      setLibrary(getLibrary(location));
+      setLibrary(getLibrary(location).name);
     };
     determineLocation();
   }, [pressed, paused]);
@@ -65,12 +65,12 @@ export default function Home() {
         },
         body: JSON.stringify({
           time,
-          multiplier: library !== undefined
+          multiplier: library !== ""
         }),
       }
     );
 
-    setLibrary(undefined);
+    setLibrary("");
   }, [time, library]);
 
   return (
@@ -100,7 +100,7 @@ export default function Home() {
         )}
       </View>
 
-      {library && <Text style={styles.libraryText}>Great work studying at {library}!</Text>}
+      {library !== "" && <Text style={styles.libraryText}>Great work studying at {library}!</Text>}
     </View>
   );
 }

@@ -28,7 +28,6 @@ export default function Friends() {
         accuracy: Location.Accuracy.BestForNavigation
       }, async (location) => {
         let library = getLibrary(location);
-        if (library === undefined) library = "";
 
         // Update db
         const URI = Constants.expoConfig.hostUri.split(":").shift();
@@ -89,7 +88,7 @@ export default function Friends() {
 
   const renderFriend = ({ item, index }) => (
     <View style= {styles.friendBlock}>
-      <FriendEntry name={`${index + 1}. ${item.name}`} />
+      <FriendEntry name={`${index + 1}. ${item.name}`} location={item.location} />
       <Pressable onPress={() => removeFriend(item.id)}>
         <View style = {styles.icon}><Ionicons name="trash-outline" size={40} color="white" /></View>
       </Pressable>
@@ -110,8 +109,6 @@ export default function Friends() {
         data={friendProfiles}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderFriend}
-        contentContainerStyle={styles.scores}
-        style={{ flex: 0.5 }}
       />
     </View>
   );
@@ -130,9 +127,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     borderBottomWidth: 2,
     borderBottomColor: "#003B5C",  
-  },
-  scores: {
-    padding: 20,
   },
   title: {
     fontSize: 24,

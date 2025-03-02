@@ -1,26 +1,31 @@
 [
     {
         "name": "Marston Science Library",
+        "short": "Marston",
         "Longitude": -82.343943,
         "Latitude": 29.647947
     },
     {
         "name": "Smathers Library",
+        "short": "Smathers",
         "Longitude": -82.341815,
         "Latitude": 29.650931
     },
     {
         "name": "Library West",
+        "short": "Lib West",
         "Longitude": -82.342891,
         "Latitude": 29.651383
     },
     {
         "name": "Architecture & Fine Arts Library",
+        "short": "Fine Arts",
         "Longitude": -82.340617,
         "Latitude": 29.648162
     },
     {
         "name": "Health Science Center Library",
+        "short": "Health Science",
         "Longitude": -82.344897,
         "Latitude": 29.640958
     }

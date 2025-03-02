@@ -36,10 +36,13 @@ export const getLibrary = (location) => {
       [library.Latitude, library.Longitude]
     );
     if (distance < closestDistance) {
-      closestLibrary = library.name;
+      closestLibrary = {
+        name: library.name,
+        short: library.short
+      }
       closestDistance = distance;
     }
   }
 
-  return closestDistance < 0.1 ? closestLibrary : undefined;
+  return closestDistance < 0.1 ? closestLibrary : { name: "", short: "" };
 };
