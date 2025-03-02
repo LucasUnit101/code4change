@@ -158,7 +158,7 @@ const addTime = async (req, res) => {
         time: time
       });
     } else {
-      profile.totalTime[timeIdx].time += time;
+      profile.totalTime[timeIdx].seconds += time;
     }
     
     // Update streak

@@ -20,7 +20,7 @@ const profileSchema = new mongoose.Schema({
         week: {
           type: Number
         },
-        minutes: {
+        seconds: {
           type: Number
         }
       }
