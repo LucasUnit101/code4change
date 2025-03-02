@@ -1,5 +1,5 @@
 import StyledButton from "@components/StyledButton";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 
 /*
   Route: /leaderboard
@@ -13,32 +13,32 @@ export default function Leaderboard() {
           <Text style={styles.title}>Leaderboard</Text>
         </View>
         <View style={styles.buttonContainer}>
-            <StyledButton 
-              text="Local"
-              backgroundColor="white"
-              borderColor='black'
-              pressedColor='#D3D3D3'
-            />
-            <StyledButton 
-              text="Global"
-              backgroundColor="white"
-              borderColor='black'
-              pressedColor='#D3D3D3'
-            />
+          <StyledButton 
+            text="Friends"
+            backgroundColor="white"
+            borderColor="black"
+            pressedColor="#D3D3D3"
+          />
+          <StyledButton 
+            text="Global"
+            backgroundColor="white"
+            borderColor="black"
+            pressedColor="#D3D3D3"
+          />
         </View>
         <View style={styles.leaderboardFields}>
-          <Text style={styles.fieldText}>#</Text>
-          <Text style={styles.fieldText}>Name</Text>
-          <Text style={styles.fieldText}>Time Studied</Text>
+          <Text style={[styles.fieldText, styles.fieldHeader]}>#</Text>
+          <Text style={[styles.fieldText, styles.fieldHeader]}>Name</Text>
+          <Text style={[styles.fieldText, styles.fieldHeader]}>Time Studied</Text>
         </View>
       </View>
-      <View style={styles.leaderboard}>
+      <ScrollView style={styles.leaderboard}>
         <View style={styles.scores}>
-          <Text style={styles.users}>1</Text> 
-          <Text style={styles.users}>Lucas Romero</Text> 
-          <Text style={styles.users}>100hr</Text> 
+          <Text style={[styles.users, styles.column1]}>1</Text> 
+          <Text style={[styles.users, styles.column2]}>Lucas Romero</Text> 
+          <Text style={[styles.users, styles.column3]}>100hr</Text> 
         </View>
-      </View>
+      </ScrollView>
     </View>
   );
 }
@@ -55,26 +55,28 @@ const styles = StyleSheet.create({
     flexDirection: "row", 
     alignItems: "center",  
     justifyContent: "center",
-    
   },
 
   scores: {
     flexDirection: "row",
-    justifyContent: "space-between",
     padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "grey", 
   },
 
   users: {
-    flex: 0.2,
     fontSize: 14,
     textAlign: "left",
     color: "black",
     fontWeight: "bold",
+    flexShrink: 1,
+    flexWrap: "nowrap", 
   },
 
   title: {
-    fontSize: 24,
+    fontSize: 36,
     fontWeight: "bold",
+    marginBottom: 20,
   },
 
   top: {
@@ -94,25 +96,41 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
 
-  title: {
-    color: "black",
-    fontSize: 40,
-    fontWeight: "bold",
-    textAlign: "center",
-    justifyContent: "center",
-    padding: 20, 
-  },
-
   fieldText: {
-    flex: 1,
     fontSize: 14,
     textAlign: "left",
-    color: "grey"
+    color: "grey",
+    paddingHorizontal: 5, 
+    flexWrap: "nowrap",
   },
-  
+
+  fieldHeader: {
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+
   leaderboardFields: {
     flexDirection: "row",
     justifyContent: "space-between",
     marginTop: 10,
+    marginBottom: 10,
+  },
+
+  leaderboard: {
+    flex: 1,
+  },
+
+  column1: {
+    flex: 0.37,  
+    paddingRight: 10,
+  },
+
+  column2: {
+    flex: 0.51,  
+    paddingRight: 16,
+  },
+
+  column3: {
+    flex: 0.3,  
   },
 });

@@ -39,13 +39,13 @@ export default function Profile() {
   const latestTotalPoints = totalPoints[totalPoints.length - 1]?.points || 0;
 
   const totalTimeStudied = totalTime.reduce((acc, curr) => acc + curr.minutes, 0);
-  const totalPointsScored = totalPoints.reduce((acc, curr) => acc + curr.points, 0);
+  const totalPointsScored = totalPoints.reduce((acc, curr) => acc + curr.points, 0); //Need to update current array not add
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title} numberOfLines={1} adjustsFontSizeToFit>
-          Hello {profile.user?.name || "User"}!
+          Hello {profile.user?.username || "User"}!
         </Text>
       </View>
 
