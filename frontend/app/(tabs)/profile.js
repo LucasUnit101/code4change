@@ -67,7 +67,7 @@ export default function Profile() {
       </View>
 
       <View style={styles.statsContainer}>
-        <View style={styles.field}>
+        <View style={[styles.field, styles.weekField]}>
           <Text style={styles.statTitle}>Weekly Stats:</Text>
           <Text style={styles.statItem}>
             Weekly Time Studied:{" "}
@@ -119,6 +119,7 @@ const styles = StyleSheet.create({
 
   title: {
     fontSize: 38,
+    fontStyle: "italic",
     fontWeight: "700",
     color: "rgb(0, 56, 168)", 
   },
@@ -186,4 +187,10 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "rgb(0, 56, 168)", 
   },
+
+  weekField: {
+    borderBottomColor: "black",
+    borderBottomWidth: 2,
+  }
+
 });

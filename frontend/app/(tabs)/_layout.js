@@ -79,7 +79,7 @@ export default function TabLayout() {
 const styles = StyleSheet.create({
   header: {
     backgroundColor: '#FA4616', // Consistent theme color
-    height: 80,
+    height: 100,
     borderBottomWidth: 1,
     borderBottomColor: '#D1D8E0',  // Light gray border for header
   },
@@ -100,13 +100,13 @@ const styles = StyleSheet.create({
   logoutText: {
     color: '#FA4616', // Matching color with header
     fontWeight: '600',
-    fontSize: 16,
+    fontSize: 14,
   },
   tabBar: {
     backgroundColor: '#ffffff', // Light background for tab bar
     borderTopWidth: 1,
     borderTopColor: '#D1D8E0', // Soft gray border for the tab bar
-    height: 60,
+    height: 70,
   },
   tabBarLabel: {
     fontSize: 12,
@@ -118,5 +118,5 @@ const styles = StyleSheet.create({
   },
   icon: {
     color: '#FA4616', // Matching icon color to the header and other UI elements
-  }
+  },
 });
